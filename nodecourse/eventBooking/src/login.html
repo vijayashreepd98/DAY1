@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+
+    .bs-example{
+      margin-top: 150px;
+      margin-left: 450px;
+      width: 500px;
+      height: 350px;
+       
+      border: 1px solid #fff; 
+      border-radius: 20px; 
+      padding:30px;
+      background-color: antiquewhite;
+    }
+    #previous{
+        position: absolute;
+        top:20px;
+        left:50px;
+    }
+
+    </style>
+  </head>
+  <body>
+    
+    <div class="bs-example">
+      <form action = "/login" method="post" id="login">
+        <h2 style="text-align: center;color:rebeccapurple;">LOGIN PAGE</h2 >
+          <div class="form-group row">
+            <label for="inputEmail" class="col-sm-2 col-form-label"><strong>UserName</strong></label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputEmail" placeholder="username"name = "uname"  required>
+              </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label"><strong>Password</strong></label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name= "password" required>
+              </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+              <button type="submit" class="btn btn-primary" name = "submit">Sign in</button>
+            <div>
+          </div>
+        </div>
+    </div>
+  </form>
+  </div>
+  <a href="/" class="btn btn-info btn-lg"id="previous" >
+    <span class="glyphicon glyphicon-log-out"></span> PREVIOUS
+  </a>
+  </body>
+</html>
