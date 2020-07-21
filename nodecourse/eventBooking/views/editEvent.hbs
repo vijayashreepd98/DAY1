@@ -1,0 +1,129 @@
+<html>
+    <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script>
+
+
+      $(document).ready(() => {
+          $("#submit").click((event)=>{
+            //alert("hi");
+            $.ajax({
+            url:"/editEvent",
+            method:"POST",
+            dataType:"text",
+            data:{
+              edetails:$('#edetails').val(),
+              ename:$('#ename').val(),
+              npeople:$('#npeople').val(),
+              stime:$('#stime').val(),
+              etime:$('#etime').val(),
+              cost:$('#cost').val()
+            },
+            success:function(response){
+              alert("event updated sucessfully!!!....");
+
+              var data = JSON.parse(response);
+
+
+            }
+            });
+
+
+          });
+        });
+        </script>
+        <style>
+
+.bs-example{
+        margin-top: 50px;
+        margin-left: 300px;
+        width: 790px;
+       height: 500px;
+       
+        border: 1px solid #fff; 
+        border-radius: 20px; 
+        padding:30px;
+        background-color: rgb(140, 240, 198);
+    }
+    .btn{
+      width: 100px;
+      position: absolute;
+      left: 320px;
+      
+      
+    }
+    #back{
+        position: absolute;
+        top:30px;
+        left:50px;
+    }
+    </style>
+    </head>
+<body>
+  <h2 style = "text-align:  center;color:green">EDITING EVENT DETAILS</h2>
+        <div class="bs-example">
+        
+        <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Event Name</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="Eventname"name="ename" value="{{eventName}}"  required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Description</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="description"name="description" value="{{description}}"  required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Total Ticket</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="No Of Ticket"name="maxNoOfTicket" value ="{{tickets}}"  required>
+                </div>
+            </div>
+                        <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Booking start time</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="booking start time"value="{{bookingStartTime}}" name = "stime" required>
+                </div>
+            </div>
+             <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Booking end time</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="booking end time"value="{{bookingEndTime}}" name="eetime" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label"><strong>Ticket cost</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="cost"value="{{cost}}" name="cost" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="btn">
+                    <button type="submit" class="btn btn-primary" id="submit"name = "submit">EDIT</button>
+                </div>
+            </div>
+            
+
+        </table>
+        
+    
+
+    </div>
+     <a href="/eventView"><button type="button" onclick="goBack()" class="btn btn-success" id="back">PREVIOUS</button>
+
+
+
+</body>
+</html>

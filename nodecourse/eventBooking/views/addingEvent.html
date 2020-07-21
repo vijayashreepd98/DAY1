@@ -13,26 +13,38 @@
     $(document).ready(() => {
       $("#submit").click((event)=>{
        //alert("hi");
-       var fd = new FormData();
-       var file = $('#img')[0].files[0];
-       fd.append('file',file);
+       //var stime =$('#stime').val();
+      //  var d = new Date(stime);
+      //  var date = d.getDate();
+      //  var month = d.getMonth()+1; // month will be zero based
+      //   var year = d.getFullYear();
+      //   var hr= d.getHours();
+      //   var minute = d.getMinutes();
+      //   var sec = d.getSeconds();
+      //   var startTime = date+" /"+month+"/"+year+" at :"+hr+":"+minute+":"+sec;
+      //  var fd = new FormData(this);
+      //  fd.append(date,date);
+       //var file = $('#img')[0].files[0].
+       //alert(month)
+       console.log(file)
+      //  fd.append('file',file);
         $.ajax({
           url:"/addingEvent",
           method:"POST",
           dataType:"text",
           data:
-          //new FormData(this),
+          new FormData(this),
           
-          {
+          // {
             
-            edetails:$('#edetails').val(),
-            ename:$('#ename').val(),
-            npeople:$('#npeople').val(),
-            stime:$('#stime').val(),
-            etime:$('#etime').val(),
-            cost:$('#cost').val(),
-            image: $('#img').get(0).file
-          },
+          //   edetails:$('#edetails').val(),
+          //   ename:$('#ename').val(),
+          //   npeople:$('#npeople').val(),
+          //   stime:$('#etime').val(),
+          //   etime:$('#etime').val(),
+          //   cost:$('#cost').val()
+            
+          // },
           success:function(response){
             alert("event added sucessfully!!!....!!");
             //var data = JSON.parse(response);

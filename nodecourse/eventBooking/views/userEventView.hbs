@@ -1,6 +1,14 @@
 <html><head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=100, initial-scale=1">
+    <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -38,7 +46,8 @@
         height: 60px;
     }
     table{
-        margin: 60px;
+        margin: 30px;
+        margin-top: 10px;
     }
       
     table th{
@@ -90,15 +99,53 @@ h1, h2{
     color: blue;
 
 }
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
 </style>
  
 </head>
 <body>
+<div class="topnav">
+  <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM </i></a>
+    
+  
+  <div class="topnav-right">
+    
+    <a href="#about">Purchased ticket</a>
+     <a href="/">LOGOUT</a>
+  </div>
+</div>
+
 <table class="table table-hover">
     
     {{!-- <thead><tr><th>EVENT NAME</th><th>DESCRIPTION</th><th>AVAILABLE TICKET</th><th>BOOKING START TIME</th><th>BOOKING END TIME</th><th>COST</th><th>image<th></tr></thead> --}}
- <h1>WELCOME</h1>  
-<h2>EVENT BOOKING SYSTEM</h2>
+ {{!-- <h1>WELCOME {{username}}</h1>  
+<h2>EVENT BOOKING SYSTEM</h2> --}}
 <div class="container">
       <div class="row justify-content-center">
         <table>
@@ -113,7 +160,7 @@ h1, h2{
      <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
           <div class='card shadow' style='width: 40rem';>
             <div class='inner'>
-           <img src="{{this.image}}" class='card-img-top' >";  
+           <img src="{{this.image}}" class='card-img-top' >  
   {{!-- //<img src='add1.php' class='card-img-top' alt='keralaimage'> --}}
 </div>
   <div class='card-body text-center'>
@@ -121,10 +168,9 @@ h1, h2{
     <p class='card-text'>Available tickets:{{this.maxNoOfTicket}}</p>
      <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
      <h2 class='card-text'>COST:{{this.cost}}</h2>
-    <a href='/editEvent?eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}"' class='btn btn-success'>Editing event.....</a>
-     <a href='/deleteEvent?eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}"' class='btn btn-success'>Deleting event.....</a>
+    <a href='/viewMore?likes={{this.likes}}&username={{../username}}&eventId={{this._id}}&eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
+     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}"' class='btn btn-success'>View More....</a>
+     
   </div>
 </div>
 </div></td>
@@ -135,8 +181,7 @@ h1, h2{
         </table></div></div>
     
 {{!-- </table> --}}
- <a href="/adminAddingEvent"><button type="button" onclick="goBack()" class="btn btn-success" id="back">ADD NEW EVENT</button>
-</a>
+
 </body> 
 
 </html> 

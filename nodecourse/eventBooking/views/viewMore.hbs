@@ -1,0 +1,383 @@
+{{!-- <html>
+    <head>
+<style>
+    h1{
+        text-align: center;
+        color:red;
+    }
+    .container{
+      width:300px;
+      height: 100px;
+      color: black;
+      background-color: blue;
+      border: 1.5px;
+      text-align: left;
+      border-width: 1.5px;
+    }
+</style>
+
+
+    </head>
+    <body>
+<h1>VIEW COMMENTS</h1>
+{{#each comments}}
+<div class="container">
+    <p id="uname"><strong>{{this.userName}} :</strong><p>{{this.comments}}</p>
+</div>
+
+{{/each}}
+
+
+    </body>
+
+</html> --}}
+
+
+
+
+
+
+
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+var cnt = {{ likes }};
+        $('#buy').click(function(){
+          var trigger = document.getElementById('buy'),
+          modal = document.getElementById('click');
+          trigger.addEventListener('click', function(e){
+     if (modal.style.display == 'block'){
+          modal.style.display = 'none';
+     }else{
+          modal.style.display = 'block';
+     }
+}, true);
+          });
+          $("#myid").click(function() { 
+          document.getElementById("myid").style.color = "{{color2}}";
+          if (cnt < {{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+            cnt = cnt + 1;
+            document.getElementById("likeid").value = cnt
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+            document.getElementById("myid").style.color = "{{color2}}";
+          } else if(cnt >={{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+              cnt = cnt - 1;
+              var para = document.getElementById("like");
+              para.innerHTML = "LIKES :" + cnt;
+              para.style.bold;
+              document.getElementById("likeid").value = cnt
+              document.getElementById("myid").style.color = "{{color1}}";
+              document.getElementById("status").value=document.getElementById("myid").style.color;
+          } else if(cnt == {{ likes }}  && document.getElementById("myid").style.color == "black") {
+            cnt = cnt - 1;
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("likeid").value = cnt;
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+            document.getElementById("myid").style.color = "{{color2}}";
+          } else if(cnt >={{ likes }}-1  &&document.getElementById("myid").style.color == "black"){
+            cnt = cnt + 1;
+            document.getElementById("likeid").value = cnt
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("myid").style.color = "{{color1}}";
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+          }
+      
+      $.ajax({
+        type: "POST",
+        url: "/liked?likes={{likes}}&username={{username}}",
+        data: {
+          //'id':"dghjkj"
+          'id': "{{eventId}}",
+          'like':$('#likeid').val(),
+          'userName': "{{username}}",
+          'eventName': "{{eventName}}",
+          'status': $('#status').val(),
+        
+        },
+        success : function(response) {
+          console.log("succeeded!!!"+response);
+        }
+
+      })
+      }); 
+
+      $(document).ready(() => {
+          $("#btn").click((event)=>{
+              event.preventDefault();
+             //  $('#usernames').empty();
+                           //$('#times').empty();
+                                      // $('#commentadd').empty();
+       setTimeout(function()
+       {                                          //$('#img').empty();
+               //alert($('#usernames').val());
+        var today = new Date();
+        var date = today.getDate()+'/'+(today.getMonth()+1)+'/'
+        +today.getFullYear()+' @ '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
+        var day =new Date();
+          var eventId ="{{eventId}}"; 
+           var eventName = "{{eventName}}";
+          var userName = "{{username}}";
+          var comments = $('#comment').val();
+         
+
+         //alert(comments);
+          $.ajax({
+            url:"/addComment",
+            method:"POST",
+            dataType:"text",
+            data:{
+              eventId:eventId,
+              eventName:eventName,
+              userName:userName,
+              comments:comments,
+              times:date
+            },
+            success:function(response){
+                alert("posted sucessfully");
+                $('#comment').val("");
+                //alert($('#comment').val())
+              var data = JSON.parse(response);
+              for(var i=0;i<data.length;i++) {
+  {{!-- var html = [];
+    html.push("<li class='media'><a href='#'' class='pull-left' id='img'>");
+ html.push("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle> </a>");
+html.push("<div class='media-body'><span class='text-muted pull-right'>");
+html.push("<small class='text-muted' id='times'>"+data[i].time+"</small></span>");
+html.push("<strong class='text-success' id='usernames'></strong> <p id='commentadd'>"+data[i].comments+"</p></div></li>");
+             console.log(html);  --}}
+              //console.log(data[0].time+" "+data[0].eventName+" "+data[0].eventId+" "+data[0].userName+" "+data[0].comments);
+            $('#usernames').html("@"+data[i].userName);
+            $('#times').html("<strong>Posted on:</strong>"+data[i].time);
+            $('#commentadd').html("<strong>Comments:  </strong>"+data[i].comments); 
+            $('#img').html("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle'>");
+
+              }
+
+            }
+          
+
+          });
+
+           
+          },2000);
+          }); 
+      
+
+      });
+      </script>
+         
+  <style>
+    {{!-- body{
+      background-color:thistle;
+    } --}}
+    .fa {
+      font-size: 60px;
+
+        {
+          {
+           !-- cursor: pointer;
+          --
+        }
+      }
+
+        {
+          {
+           !-- user-select: ;
+          --
+        }
+      }
+    }
+
+    .fa:hover {
+      color: darkblue;
+    }
+
+
+    h1 {
+      text-align: center;
+      color: blue;
+    }
+
+    h3 {
+      text-align: center;
+      color: brown;
+    }
+
+    i {
+      position: absolute;
+      top: 330px;
+      left: -740px;
+
+      color: {
+          {
+          color1
+        }
+      }
+    }
+
+    p {
+      font-size: 25px;
+      position: relative;
+      top: 320px;
+      left: -900px;
+    }
+
+    .color-change {
+      color: {{color2}} ;
+    }
+    #likestatus{
+      color:darkblue;
+      background-color: hotpink;
+      position: absolute;
+      left:280px;
+      top:600px;
+      width:100px;
+      height: 40px;
+    }
+          
+{{!-- body{margin-top:20px;} --}}
+#container{
+
+    position:absolute;
+    left:30%;
+    width:1000px;
+}
+.comment-wrapper .panel-body {
+    max-height:650px;
+    overflow:auto;
+}
+
+.comment-wrapper .media-list .media img {
+    width:64px;
+    height:64px;
+    border:2px solid #e5e7e8;
+}
+
+.comment-wrapper .media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom:25px;
+}
+#btn{
+    position: absolute;
+    top:200px;
+    right:50px;
+}
+
+        </style>
+
+        </head>
+        <body>
+            <div class="row bootstrap snippets" id="container">
+    <div class="col-md-6 col-md-offset-2 col-sm-12">
+        <div class="comment-wrapper">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <strong>{{eventName}} EVENT COMMENT PANEL</strong>
+                </div>
+                <div class="panel-body">
+                    {{!-- <form method="post" action="/commentAdd?userName={{userName}}&eventName={{eventName}}&eventId={{eventId}}">  --}}
+                    <textarea class="form-control" placeholder="write a comment here..." rows="10" cols="40" name="comment" id="comment"></textarea>
+                    <br>
+
+                    <button id="btn"class="btn btn-info pull-right">POST</button>
+                    {{!-- <input type="submit" class="btn btn-info pull-right">POST</input> --}}
+                    {{!-- </form>  --}}
+                    <div class="clearfix"></div>
+                    <hr>
+                    <ul class="media-list">
+                        {{#each comments}}
+                        <li class="media">
+                            <a href="#" class="pull-left">
+                                <img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle">
+                            </a>
+                            
+                            <div class="media-body">
+                                <span class="text-muted pull-right">
+                                    <strong>Posted on:</strong><small class="text-muted" id="time">{{this.time}}</small>
+                                </span>
+                                <strong class="text-success" id="username">@{{this.userName}}</strong>
+                                <p id="comments">
+                                  <strong>Comments:  </strong>{{this.comments}} 
+                                </p>
+                            </div>
+                            
+                        </li>
+                        
+                        {{/each}}
+
+                         <li class="media"> 
+                            <a href="#" class="pull-left" id="img">
+                                
+                                {{!-- <img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle"> --}}
+                            </a>
+                            
+                            <div class="media-body">
+                                <span class="text-muted pull-right">
+                                    <small class="text-muted" id="times"></small>
+                                </span>
+                                <strong class="text-success" id="usernames"></strong>
+                                <p id="commentadd">
+                                  
+                                   
+                                </p>
+                            </div>
+                            
+                        </li> 
+                                              
+
+
+                    
+
+                      
+                      
+
+                       
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <strong>
+     
+    <p id="like">LIKES :{{likes}}</p>
+  </strong>
+  <input type="hidden" name="status" value="" id="status" />
+  <i  class="fa fa-thumbs-up" id="myid" style="color:{{color1}};"></i>
+  <input type="hidden" name="like" value="{{likes}}" id="likeid" />
+    
+</div>
+{{!-- <div id="id"></div> --}}
+  
+  {{!-- <a id="btn" href="/descriptionPage?status={{status}}&username={{userName}}&id={{eventId}}&eventName={{eventName}}&cost={{cost}}&bookingStartTime={{bookingStartTime}}&bookingEndTime={{bookingEndTime}}&likes={{likes}}&description={{description}}&tickets={{tickets}}"><button type="button" class="btn btn-warning">PREVIOUS</button></a>  --}}
+
+
+            </body>
+    </head>
+    </html>
