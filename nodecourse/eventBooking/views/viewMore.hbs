@@ -1,133 +1,15 @@
-{{!-- <html>
-    <head>
-<style>
-    h1{
-        text-align: center;
-        color:red;
-    }
-    .container{
-      width:300px;
-      height: 100px;
-      color: black;
-      background-color: blue;
-      border: 1.5px;
-      text-align: left;
-      border-width: 1.5px;
-    }
-</style>
-
-
-    </head>
-    <body>
-<h1>VIEW COMMENTS</h1>
-{{#each comments}}
-<div class="container">
-    <p id="uname"><strong>{{this.userName}} :</strong><p>{{this.comments}}</p>
-</div>
-
-{{/each}}
-
-
-    </body>
-
-</html> --}}
-
-
-
-
-
 
 
 <html>
     <head>
         <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
-var cnt = {{ likes }};
-        $('#buy').click(function(){
-          var trigger = document.getElementById('buy'),
-          modal = document.getElementById('click');
-          trigger.addEventListener('click', function(e){
-     if (modal.style.display == 'block'){
-          modal.style.display = 'none';
-     }else{
-          modal.style.display = 'block';
-     }
-}, true);
-          });
-          $("#myid").click(function() { 
-          document.getElementById("myid").style.color = "{{color2}}";
-          if (cnt < {{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
-            cnt = cnt + 1;
-            document.getElementById("likeid").value = cnt
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-            document.getElementById("myid").style.color = "{{color2}}";
-          } else if(cnt >={{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
-              cnt = cnt - 1;
-              var para = document.getElementById("like");
-              para.innerHTML = "LIKES :" + cnt;
-              para.style.bold;
-              document.getElementById("likeid").value = cnt
-              document.getElementById("myid").style.color = "{{color1}}";
-              document.getElementById("status").value=document.getElementById("myid").style.color;
-          } else if(cnt == {{ likes }}  && document.getElementById("myid").style.color == "black") {
-            cnt = cnt - 1;
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("likeid").value = cnt;
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-            document.getElementById("myid").style.color = "{{color2}}";
-          } else if(cnt >={{ likes }}-1  &&document.getElementById("myid").style.color == "black"){
-            cnt = cnt + 1;
-            document.getElementById("likeid").value = cnt
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("myid").style.color = "{{color1}}";
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-          }
-      
-      $.ajax({
-        type: "POST",
-        url: "/liked?likes={{likes}}&username={{username}}",
-        data: {
-          //'id':"dghjkj"
-          'id': "{{eventId}}",
-          'like':$('#likeid').val(),
-          'userName': "{{username}}",
-          'eventName': "{{eventName}}",
-          'status': $('#status').val(),
-        
-        },
-        success : function(response) {
-          console.log("succeeded!!!"+response);
-        }
 
-      })
-      }); 
 
-      $(document).ready(() => {
+                   
+        $(document).ready(() => {
+
           $("#btn").click((event)=>{
               event.preventDefault();
              //  $('#usernames').empty();
@@ -136,16 +18,15 @@ var cnt = {{ likes }};
        setTimeout(function()
        {                                          //$('#img').empty();
                //alert($('#usernames').val());
-        var today = new Date();
-        var date = today.getDate()+'/'+(today.getMonth()+1)+'/'
-        +today.getFullYear()+' @ '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
         var day =new Date();
+        var today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
+        ':'+day.getMinutes()+':'+day.getSeconds();
+        
           var eventId ="{{eventId}}"; 
            var eventName = "{{eventName}}";
           var userName = "{{username}}";
-          var comments = $('#comment').val();
-         
-
+          var comments = $('#comment').val(); 
+//alert(today);
          //alert(comments);
           $.ajax({
             url:"/addComment",
@@ -156,7 +37,7 @@ var cnt = {{ likes }};
               eventName:eventName,
               userName:userName,
               comments:comments,
-              times:date
+              times:today
             },
             success:function(response){
                 alert("posted sucessfully");
@@ -191,82 +72,22 @@ html.push("<strong class='text-success' id='usernames'></strong> <p id='commenta
 
       });
       </script>
-         
-  <style>
-    {{!-- body{
-      background-color:thistle;
-    } --}}
-    .fa {
-      font-size: 60px;
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
 
-        {
-          {
-           !-- cursor: pointer;
-          --
-        }
-      }
-
-        {
-          {
-           !-- user-select: ;
-          --
-        }
-      }
-    }
-
-    .fa:hover {
-      color: darkblue;
-    }
-
-
-    h1 {
-      text-align: center;
-      color: blue;
-    }
-
-    h3 {
-      text-align: center;
-      color: brown;
-    }
-
-    i {
-      position: absolute;
-      top: 330px;
-      left: -740px;
-
-      color: {
-          {
-          color1
-        }
-      }
-    }
-
-    p {
-      font-size: 25px;
-      position: relative;
-      top: 320px;
-      left: -900px;
-    }
-
-    .color-change {
-      color: {{color2}} ;
-    }
-    #likestatus{
-      color:darkblue;
-      background-color: hotpink;
-      position: absolute;
-      left:280px;
-      top:600px;
-      width:100px;
-      height: 40px;
-    }
           
-{{!-- body{margin-top:20px;} --}}
-#container{
+body{margin-top:20px;}
 
-    position:absolute;
-    left:30%;
+
+#container{
     width:1000px;
+    position: absolute;
+    left:30%;
 }
 .comment-wrapper .panel-body {
     max-height:650px;
@@ -288,7 +109,23 @@ html.push("<strong class='text-success' id='usernames'></strong> <p id='commenta
     top:200px;
     right:50px;
 }
+body{
+    {{!-- background-color:violet;
+    opacity: 0.5; --}}
+}
+.fa {
+  font-size: 50px;
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  left:30px;
+  top:190px;
+}
 
+
+.fa:hover {
+  color: darkblue;
+}
         </style>
 
         </head>
@@ -298,7 +135,7 @@ html.push("<strong class='text-success' id='usernames'></strong> <p id='commenta
         <div class="comment-wrapper">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <strong>{{eventName}} EVENT COMMENT PANEL</strong>
+                    <strong>COMMENT PANEL</strong>
                 </div>
                 <div class="panel-body">
                     {{!-- <form method="post" action="/commentAdd?userName={{userName}}&eventName={{eventName}}&eventId={{eventId}}">  --}}
@@ -364,18 +201,74 @@ html.push("<strong class='text-success' id='usernames'></strong> <p id='commenta
         </div>
 
     </div>
-    <strong>
-     
-    <p id="like">LIKES :{{likes}}</p>
-  </strong>
-  <input type="hidden" name="status" value="" id="status" />
-  <i  class="fa fa-thumbs-up" id="myid" style="color:{{color1}};"></i>
-  <input type="hidden" name="like" value="{{likes}}" id="likeid" />
-    
-</div>
-{{!-- <div id="id"></div> --}}
   
-  {{!-- <a id="btn" href="/descriptionPage?status={{status}}&username={{userName}}&id={{eventId}}&eventName={{eventName}}&cost={{cost}}&bookingStartTime={{bookingStartTime}}&bookingEndTime={{bookingEndTime}}&likes={{likes}}&description={{description}}&tickets={{tickets}}"><button type="button" class="btn btn-warning">PREVIOUS</button></a>  --}}
+    {{!-- <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i> --}}
+<input type="hidden" name="status" value="" id="status" />
+  <i  class="fa fa-thumbs-up" id="myid" style="color: {{color1}};"></i>
+      <p id="like" style="position: absolute;top:210px;left:80px;"><strong>LIKES :{{likes}}</strong></p>
+
+  <input type="hidden" name="like" value="{{likes}}" id="likeid" />
+  <script>
+              var cnt = {{ likes }};
+
+       $("#myid").click(function() { 
+          document.getElementById("myid").style.color = "{{color2}}";
+          if (cnt < {{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+            cnt = cnt + 1;
+            document.getElementById("likeid").value = cnt
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+            document.getElementById("myid").style.color = "{{color2}}";
+          } else if(cnt >={{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+              cnt = cnt - 1;
+              var para = document.getElementById("like");
+              para.innerHTML = "LIKES :" + cnt;
+              para.style.bold;
+              document.getElementById("likeid").value = cnt
+              document.getElementById("myid").style.color = "{{color1}}";
+              document.getElementById("status").value=document.getElementById("myid").style.color;
+          } else if(cnt == {{ likes }}  && document.getElementById("myid").style.color == "black") {
+            cnt = cnt - 1;
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("likeid").value = cnt;
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+            document.getElementById("myid").style.color = "{{color2}}";
+          } else if(cnt >={{ likes }}-1  &&document.getElementById("myid").style.color == "black"){
+            cnt = cnt+1;
+            document.getElementById("likeid").value = cnt
+            var para = document.getElementById("like");
+            para.innerHTML = "LIKES :" + cnt;
+            para.style.bold;
+            document.getElementById("myid").style.color = "{{color1}}";
+            document.getElementById("status").value=document.getElementById("myid").style.color;
+          }
+      
+      $.ajax({
+        type: "POST",
+        url: "/liked?likes={{likes}}&username={{username}}",
+        data: {
+          //'id':"dghjkj"
+          'id': "{{eventId}}",
+          'like':$('#likeid').val(),
+          'userName': "{{username}}",
+          'eventName': "{{eventName}}",
+          'status': $('#status').val(),
+        
+        },
+        success : function(response) {
+          console.log("succeeded!!!"+response);
+        }
+
+      })
+      }); 
+      </script>
+  
+
+</div>
 
 
             </body>
