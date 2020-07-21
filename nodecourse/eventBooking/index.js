@@ -51,6 +51,10 @@ var upload = multer({
 const port = process.env.PORT || 3000;
 const customerModel = require('./src/models/registerModel.js');
 const eventList = require('./src/models/eventModel.js');
+const commentList = require('./src/models/addComment.js');
+const eventStatus = require('./src/models/likeModel.js');
+
+
 app.get('/' ,(req, res) => {
   res.sendfile( './views/home.html');
 });
@@ -64,6 +68,7 @@ var password = req.body.password;
 
 //  res.send(name+" "+password);
 if( name === 'admin' && password === 'admin') {
+  
  
  const events = await eventList.find( { }, {
     eventName: 1,
@@ -108,7 +113,12 @@ app.post('/addingEvent',upload.single('img'),(req,res) => {
   const bookingEndTime = req.body.etime;
   const cost = req.body.cost;
   const image = req.file.filename;
-  //res.send(bookingStartTime)
+  const sdate = dateFormat(bookingStartTime,"d-mm-yyyy  @ h:MM:ss");
+  const edate = dateFormat(bookingEndTime,"d-mm-yyyy  @ h:MM:ss");
+  //res.send(edate);
+// const stime = new Date().toISOString().replace('/T/',' ').replace(/\..+/,' ');
+// res.send(stime);
+ // res.send(bookingStartTime+"..."+image);
  // res.send(image);
 //res.sendfile(req.file.path)
   // const img = fs.readFileSync(image);
@@ -127,8 +137,8 @@ if(!image){
     eventName: ename,
     description: edetails,
     maxNoOfTicket: npeople,
-    bookingStartTime: new Date(bookingStartTime),
-    bookingEndTime: new Date(bookingEndTime),
+    bookingStartTime: sdate,
+    bookingEndTime: edate,
     cost: cost,
     image : image
   });
@@ -138,7 +148,49 @@ if(!image){
     res.send('failed!!!');
   }); 
 }
-})
+});
+app.get('/editEvent', (req, res) => {
+
+  res.render('editEvent.hbs', {
+    eventName: req.query.eventName,
+    description: req.query.description,
+    tickets: req.query.tickets,
+    bookingStartTime: req.query.bookingStartTime,
+    bookingEndTime: req.query.bookingEndTime,
+    cost: req.query.cost
+    
+  });
+});
+
+app.post('/editEvent' , async (req,res) =>{
+  const editedView = await eventList.findOneAndUpdate({
+    eventName: req.body.ename
+  }, {
+    description: req.body.description,
+    bookingStartTime: req.body.stime,
+    bookingEndTime: req.body.eetime,
+    cost: req.body.cost,
+    maxNoOfTicket: req.body.maxNoOfTicket
+  });
+  if (editedView) {
+    res.send('Successfully update the event details!!!!...');
+  } else {
+    res.send('failure while updating!!!!');
+  }
+});
+app.get('/deleteEvent', async (req, res) => {
+  const deletedEvent = await eventList.findOneAndDelete({
+    eventName: req.query.eventName,
+
+  });
+  if (deletedEvent) {
+
+   res.send('deleted suceessfully!...');
+  } else {
+    res.send('failed to delete!!!..');
+  }
+
+});
 app.get('/userRegistration',(req, res) => {
   
   res.sendfile('./views/userRegistration.html');
@@ -164,10 +216,15 @@ app.post('/userRegistration', async(req, res) => {
       name: name,
       password: password
     });
+    
     register.save().then(async() => {
       const today = new Date();
-      const events = await eventList.find( { bookingStartTime: { $lte: today } ,
-        bookingEndTime: { $gte: today } }, {
+     //let date = getDate();
+      //let date = new dateFormat("d-mm-yyyy  @ h:MM:ss");
+      //res.send(date);
+      const events = await eventList.find( {// Date(bookingStartTime): { $lte: today } ,
+        // bookingEndTime: { $gte: date } 
+      }, {
         eventName: 1,
         description: 1,
         maxNoOfTicket: 1,
@@ -175,9 +232,11 @@ app.post('/userRegistration', async(req, res) => {
         bookingEndTime: 1,
         cost: 1,
         likes: 1,
+        image:1,
         _id: 1
         });
-        if (events) {
+         if (events) {
+           //res.send("hai");
           res.render('userEventView.hbs', {
             events:events,
             username:req.body.uname
@@ -207,8 +266,9 @@ const user = await customerModel.findOne( {
 }); 
 if(user){
   const today = new Date();
-      const events = await eventList.find( { bookingStartTime: { $lte: today } ,
-        bookingEndTime: { $gte: today } }, {
+      const events = await eventList.find( {// bookingStartTime: { $lte: today } ,
+       // bookingEndTime: { $gte: today } 
+      }, {
         eventName: 1,
         description: 1,
         maxNoOfTicket: 1,
@@ -216,8 +276,11 @@ if(user){
         bookingEndTime: 1,
         cost: 1,
         likes: 1,
+        image:1,
         _id: 1
         });
+        
+        
         if (events) {
           res.render('userEventView.hbs', {
             events:events,
@@ -232,8 +295,124 @@ if(user){
 
 })
 
+app.get('/viewMore',async(req,res) =>{
+  const comments = await commentList.find({ eventName: req.query.eventName,
+    eventId:req.query.eventId
+   });
+  const  events  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
+  });
+  
+  //console.log(comments[0]);
+  if (events.length===0) {
+    //console.log("Failed");  
+  const newUser = new eventStatus({
+    eventName: req.query.eventName,
+    userName: req.query.username,
+
+    status: false,
+
+  });
+  newUser.save().then(( ) => {
+    console.log("success");
+  }).catch(()=>{
+    console.log("Failed");});
+  }
+  const  allEvents  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
+  });
+  //  const eventDetails =  eventList.findById(req.query.eventId);
+  //  console.log();
+  // const allevents =  eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
+  // })
+  
+  //res.send(req.query.eventId)
+
+//onsole.log(allevents[0])
+
+  let color1, color2;
+  if(!allEvents){
+   return  res.send("try again");
+  }
+  if (allEvents[0].status === true) {
+    color1 = "blue";
+    color2 = "black"
+  } else {
+    color1 = "black";
+    color2 = "blue"
+  }
+ // res.send(eventDetails.likes)
+  // color1 = "blue";
+  // color2 = "black"
+ res.render('viewMore.hbs',{
+  description: req.query.description,
+  bookingStartTime: req.query.stime,
+  bookingEndTime: req.query.eetime,
+  cost: req.query.cost,
+  maxNoOfTicket: req.query.maxNoOfTicket,
+  eventName:req.query.eventName,
+  username: req.query.username,
+  comments:comments,
+  eventId:req.query.eventId,
+  likes: req.query.likes,
+  // color1:color1,
+  // color2:color2,
+  status: allEvents[0].status,
+  color1: color1,
+  color2: color2
+
+ })
 
 
+});
+app.post('/liked',async (req,res)=>{
+  const event = await eventList.findOneAndUpdate({
+    _id: req.body.id
+  }, {
+    likes: req.body.like
+  }
+  );
+  
+  let status;
+  if(req.body.status === "blue"){
+    status = true;
+  } else {
+    status = false;
+  }
+ 
+    const activity = await eventStatus.findOneAndUpdate({
+      userName: req.body.userName, 
+       
+      eventName: req.body.eventName
+    }, {
+    status: status,
+    likes: req.body.like 
+    });
+  
+  
+});
+app.post('/addComment', async(req, res) => {
+  //console.log(req.body.userName); 
+  
+   const addComment = new commentList({
+     eventName: req.body.eventName,
+     eventId: req.body.eventId,
+     userName: req.body.userName,
+     comments: req.body.comments,
+     time: req.body.times
+   });
+   addComment.save().then(()=>{
+ 
+     res.jsonp([{time:req.body.times ,
+ eventId:req.body.eventId,
+ eventName:req.body.eventName,
+ userName:req.body.userName,
+ comments:req.body.comments
+     }])
+   }).catch(()=>
+   {
+     console.log("sorry");
+   });
+ 
+ });
 
 //app.use(express.urlencoded());
 app.use(express.json()); 
