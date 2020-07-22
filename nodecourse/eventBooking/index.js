@@ -1,8 +1,8 @@
 const express = require('express');
 const validator = require('validator');
 const bodyParser = require('body-parser');
-var handlebars     = require('handlebars');
-var JSAlert = require("js-alert");
+const handlebars     = require('handlebars');
+const JSAlert = require("js-alert");
 const dateFormat = require('dateformat');
 //var HandlebarsIntl = require('handlebars-intl')
 const multer = require('multer');
@@ -24,7 +24,6 @@ hbs.registerHelper('if_eq', function(a, b, opts) {
 
 const flash = require('connect-flash');
 require('./src/db/mongoose');
-//const app = express();
 app.use(express.urlencoded());
 app.use(express.json()); 
 app.use(express.static('./uploads/'));
@@ -53,6 +52,8 @@ const customerModel = require('./src/models/registerModel.js');
 const eventList = require('./src/models/eventModel.js');
 const commentList = require('./src/models/addComment.js');
 const eventStatus = require('./src/models/likeModel.js');
+const bookedTickets = require('./src/models/ticketModel.js');
+
 
 
 app.get('/' ,(req, res) => {
@@ -64,9 +65,7 @@ app.get('/adminLogin',(req, res) => {
 app.post('/adminLogin',async(req,res,next) => {
 var name = req.body.uname;
 var password = req.body.password;
-//res.json({ access: 'logged' });
 
-//  res.send(name+" "+password);
 if( name === 'admin' && password === 'admin') {
   
  
@@ -81,10 +80,6 @@ if( name === 'admin' && password === 'admin') {
     _id: 1
   });
   if (events) {
-    //res.send("hia"+events[0]);
-  //res.sendfile(events[0]); 
-  //res.sendfile('./views/sample.html');
-  
     res.render('eventView.hbs',{
       events: events
     });
@@ -93,10 +88,9 @@ if( name === 'admin' && password === 'admin') {
      
 } else {
   res.send("LOGIN FAILED!!!");
-//   console.log("soory");
-// res.status(404).send();
+
 }
-//const error =  new error("Please provide valid credential");
+
 
 });
 app.get('/adminAddingEvent',(req,res) =>{
@@ -115,21 +109,12 @@ app.post('/addingEvent',upload.single('img'),(req,res) => {
   const image = req.file.filename;
   const sdate = dateFormat(bookingStartTime,"d-mm-yyyy  @ h:MM:ss");
   const edate = dateFormat(bookingEndTime,"d-mm-yyyy  @ h:MM:ss");
-  //res.send(edate);
-// const stime = new Date().toISOString().replace('/T/',' ').replace(/\..+/,' ');
-// res.send(stime);
- // res.send(bookingStartTime+"..."+image);
- // res.send(image);
-//res.sendfile(req.file.path)
-  // const img = fs.readFileSync(image);
-  // const encoded_imgage = img.toString('base64');
-//res.send(encoded_imgage);
+  
 if(!image){
   res.send("Please upload a file");
 
 }else{
     console.log(image);
-//res.send(image);
   if (image === "" || ename === "" || edetails === "" ||npeople === "" ||bookingStartTime === "" || bookingEndTime === "" || cost === "") {
     return res.send('Please provide valid information ..All are mandatory');
   }
@@ -197,7 +182,7 @@ app.get('/userRegistration',(req, res) => {
 });
 
 app.post('/userRegistration', async(req, res) => {
-  var name = req.body.uname;
+  const name = req.body.uname;
   // res.send(name);
   const password = req.body.password;
   const cpassword  = req.body.cpassword;
@@ -219,9 +204,6 @@ app.post('/userRegistration', async(req, res) => {
     
     register.save().then(async() => {
       const today = new Date();
-     //let date = getDate();
-      //let date = new dateFormat("d-mm-yyyy  @ h:MM:ss");
-      //res.send(date);
       const events = await eventList.find( {// Date(bookingStartTime): { $lte: today } ,
         // bookingEndTime: { $gte: date } 
       }, {
@@ -258,8 +240,8 @@ app.get('/userLogin',(req, res) => {
   res.sendfile('./views/userLogin.html');
 });
 app.post('/userLogin',async(req,res)=> {
-var name = req.body.uname;
-var password = req.body.password;
+const name = req.body.uname;
+const password = req.body.password;
 const user = await customerModel.findOne( {
   name:name,
   password: password
@@ -280,7 +262,7 @@ if(user){
         _id: 1
         });
         
-        
+       // console.log(events);
         if (events) {
           res.render('userEventView.hbs', {
             events:events,
@@ -296,6 +278,71 @@ if(user){
 })
 
 app.get('/viewMore',async(req,res) =>{
+ 
+  const comments = await commentList.find({ eventName: req.query.eventName,
+    eventId:req.query.eventId
+   });
+  const  events  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
+  });
+  
+  //console.log(comments[0]);
+  if (events.length===0) {
+    //console.log("Failed");  
+  const newUser = new eventStatus({
+    eventName: req.query.eventName,
+    userName: req.query.username,
+
+    status: false,
+
+  });
+  
+  newUser.save().then(( ) => {
+    console.log("success");
+  }).catch(()=>{
+console.log("sory");
+  })
+  }
+  
+
+  const  allEvents  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
+  });
+  
+
+  let color1, color2;
+  if(!allEvents){
+   return  res.send("try again");
+  }
+  if (allEvents[0].status === true) {
+    color1 = "blue";
+    color2 = "black"
+  } else {
+    color1 = "black";
+    color2 = "blue"
+  }
+ 
+ res.render('viewMore.hbs',{
+  description: req.query.description,
+  bookingStartTime: req.query.bookingStartTime,
+  bookingEndTime: req.query.bookingEndTime,
+  cost: req.query.cost,
+  maxNoOfTicket: req.query.maxNoOfTicket,
+  eventName:req.query.eventName,
+  username: req.query.username,
+  comments:comments,
+  eventId:req.query.eventId,
+  likes: req.query.likes,
+  // color1:color1,
+  // color2:color2,
+  status: allEvents[0].status,
+  color1: color1,
+  color2: color2,
+  image:req.query.image
+
+ });
+
+
+});
+app.get('/bookingToHome',async(req,res)=>{
   const comments = await commentList.find({ eventName: req.query.eventName,
     eventId:req.query.eventId
    });
@@ -319,14 +366,7 @@ app.get('/viewMore',async(req,res) =>{
   }
   const  allEvents  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
   });
-  //  const eventDetails =  eventList.findById(req.query.eventId);
-  //  console.log();
-  // const allevents =  eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
-  // })
   
-  //res.send(req.query.eventId)
-
-//onsole.log(allevents[0])
 
   let color1, color2;
   if(!allEvents){
@@ -339,13 +379,11 @@ app.get('/viewMore',async(req,res) =>{
     color1 = "black";
     color2 = "blue"
   }
- // res.send(eventDetails.likes)
-  // color1 = "blue";
-  // color2 = "black"
+ 
  res.render('viewMore.hbs',{
   description: req.query.description,
-  bookingStartTime: req.query.stime,
-  bookingEndTime: req.query.eetime,
+  bookingStartTime: req.query.bookingStartTime,
+  bookingEndTime: req.query.bookingEndTime,
   cost: req.query.cost,
   maxNoOfTicket: req.query.maxNoOfTicket,
   eventName:req.query.eventName,
@@ -353,16 +391,16 @@ app.get('/viewMore',async(req,res) =>{
   comments:comments,
   eventId:req.query.eventId,
   likes: req.query.likes,
-  // color1:color1,
-  // color2:color2,
+  
   status: allEvents[0].status,
   color1: color1,
-  color2: color2
+  color2: color2,
+  image:req.query.image
 
  })
 
 
-});
+})
 app.post('/liked',async (req,res)=>{
   const event = await eventList.findOneAndUpdate({
     _id: req.body.id
@@ -412,6 +450,75 @@ app.post('/addComment', async(req, res) => {
      console.log("sorry");
    });
  
+ });
+ app.get('/buyTicket',(req,res) =>{
+res.render('userBuyTicket.hbs',{
+  description: req.query.description,
+  bookingStartTime: req.query.bookingStartTime,
+  bookingEndTime: req.query.bookingEndTime,
+  cost: req.query.cost,
+  maxNoOfTicket: req.query.maxNoOfTicket,
+  eventName:req.query.eventName,
+  username: req.query.username,
+  comments:req.query.comments,
+  eventId:req.query.eventId,
+  likes: req.query.likes,
+  // color1:color1,
+  // color2:color2,
+  status:req.query.status,
+  color1: req.query.color1,
+  color2: req.query.color2,
+  image:req.query.image
+
+})
+ });
+
+ app.post('/bookedTicket',async(req,res) => {
+
+  var day =new Date();
+  var today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
+        ':'+day.getMinutes()+':'+day.getSeconds();
+  const datetimes = req.query.bookingEndTime;
+  if  (today  > datetimes) {
+    return res.send("event finished!!!..you cannt book the ticket now!!");
+  }
+  const event = await eventList.findOne( { 
+    eventName: req.query.eventName
+  });
+ console.log(event)
+  if (req.body.number > event.maxNoOfTicket) {
+    return res.jsonp([{message:"You cant book more ticket..Avalable ticket is "+event.maxNoOfTicket}]);
+  }
+  const newNoOfTicket = event.maxNoOfTicket - req.body.number;
+  const updateTicket = await eventList.findOneAndUpdate({
+    eventName: req.query.eventName
+  }, {
+    maxNoOfTicket : newNoOfTicket
+  });
+
+  if (updateTicket) {
+    console.log('updated successfully!!!');
+  } else {
+    console.log('failed to update the ticket count!!!');
+  }
+  const soldTicket = new  bookedTickets( {
+    userName: req.query.username,
+    eventName: req.query.eventName,
+    noOfTicket: req.body.number,
+    
+    bookingTime: today,
+    cost:req.query.cost,
+    paid:req.query.cost*req.body.number
+  });
+  soldTicket.save().then(() => {
+   return  res.jsonp([{message:"ticket booked successfuly!!.."}]);
+  }).catch(() => {
+    return res.jsonp([{message:'ticket booking failed!!!...'}]);
+  });
+
+ 
+
+
  });
 
 //app.use(express.urlencoded());
