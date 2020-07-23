@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const eventActivityModel = mongoose.model('eventStatus', {
+const eventActivityModel = mongoose.model('eventStatuses', {
   eventName: {
     type:String,  
     trim:true,
