@@ -18,11 +18,11 @@ const addEventModel = mongoose.model('addEvents', {
   },
   
   bookingStartTime : {
-    type:Date,
+    type:String,
     required: true
   },
   bookingEndTime: {
-    type:Date,
+    type:String,
     required:true
   },
   cost: {
@@ -34,13 +34,17 @@ const addEventModel = mongoose.model('addEvents', {
     default:1
   },
   image:{
-    type:String
+    type:String,
     //  type:GridFS,
-    //  data: Buffer, 
-    //  contentType: String 
+     data: Buffer, 
+     contentType: String 
     
     
    
+  },
+  totalTicket:{
+    type:Number,
+    required:true
   }
 });
 module.exports = addEventModel;

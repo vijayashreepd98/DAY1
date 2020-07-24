@@ -25,6 +25,17 @@ const ticketSoldModel = mongoose.model('soldTicket', {
   paid:{
       type:Number,
       required:true
+  },
+  image:{
+    type:String,
+    data: Buffer, 
+     contentType: String 
+    
+
+  },
+  description:{
+    type:String,
+    required:true
   }
 });
 
