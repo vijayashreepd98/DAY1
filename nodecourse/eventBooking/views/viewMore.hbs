@@ -1,5 +1,4 @@
 
-
 <html>
     <head>
         <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -15,7 +14,9 @@
         <style>
 
           
-body{margin-top:20px;}
+body{margin-top:0px;
+background-color: #ECC5C0;
+}
 
   @media screen and (max-width: 1000px) {
   .topnav a:not(:first-child) {display: none;}
@@ -108,19 +109,16 @@ body{
 .topnav-right {
   float: right;
 }
-        </style>
-
-        </head>
-        <body>
-          <div class="topnav">
+</style>
+</head>
+<body>
+  <div class="topnav">
   <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM </i></a>
-    
-  
-  <div class="topnav-right">
+    <div class="topnav-right">
         <a href="/buyTicket?image={{image}}&likes={{likes}}&eventId={{eventId}}&eventName={{eventName}}&username={{username}}&description={{description}}&bookingStartTime={{bookingStartTime}}&bookingEndTime={{bookingEndTime}}&cost={{cost}}&maxNoOfTicket={{maxNoOfTicket}}&comments={{comments}}&enentId={{eventId}}&
         status={{status}}&color1={{color1}}&color2={{color2}}">BUY TICKET</a>
 
-    <a href="#">PREVIOUS</a>
+    <a href="/viewMoreToHome?username={{username}}">PREVIOUS</a>
      <a href="/">LOGOUT</a>
   </div>
 </div>
@@ -132,13 +130,11 @@ body{
                     <strong>COMMENT PANEL</strong>
                 </div>
                 <div class="panel-body">
-                    {{!-- <form method="post" action="/commentAdd?userName={{userName}}&eventName={{eventName}}&eventId={{eventId}}">  --}}
                     <textarea class="form-control" placeholder="write a comment here..." rows="10" cols="40" name="comment" id="comment"></textarea>
                     <br>
 
                     <button id="btn"class="btn btn-info pull-right">POST</button>
-                    {{!-- <input type="submit" class="btn btn-info pull-right">POST</input> --}}
-                    {{!-- </form>  --}}
+                    
                     <div class="clearfix"></div>
                     <hr>
                     <ul class="media-list">
@@ -163,10 +159,6 @@ body{
                         {{/each}}
 
                          <li class="media"> 
-                            <a href="#" class="pull-left" id="img">
-                                
-                                {{!-- <img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle"> --}}
-                            </a>
                             
                             <div class="media-body">
                                 <span class="text-muted pull-right">
@@ -180,140 +172,101 @@ body{
                             </div>
                             
                         </li> 
-                                              
-
-
-                    
-
-                      
-                      
-
-                       
-                    </ul>
+                      </ul>
                 </div>
             </div>
         </div>
 
     </div>
     <script>
+      $(document).ready(() => {
+        $("#btn").click((event)=>{
+          event.preventDefault();
+          setTimeout(function()
+          {                                          /
+            var day =new Date();
+            var today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
+                        ':'+day.getMinutes()+':'+day.getSeconds();
+            var eventId ="{{eventId}}"; 
+            var eventName = "{{eventName}}";
+            var userName = "{{username}}";
+            var comments = $('#comment').val(); 
 
-
-                   
-        $(document).ready(() => {
-
-          $("#btn").click((event)=>{
-              event.preventDefault();
-             //  $('#usernames').empty();
-                           //$('#times').empty();
-                                      // $('#commentadd').empty();
-       setTimeout(function()
-       {                                          //$('#img').empty();
-               //alert($('#usernames').val());
-        var day =new Date();
-        var today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
-        ':'+day.getMinutes()+':'+day.getSeconds();
-        
-          var eventId ="{{eventId}}"; 
-           var eventName = "{{eventName}}";
-          var userName = "{{username}}";
-          var comments = $('#comment').val(); 
-//alert(today);
-         //alert(comments);
-          $.ajax({
-            url:"/addComment",
-            method:"POST",
-            dataType:"text",
-            data:{
-              eventId:eventId,
-              eventName:eventName,
-              userName:userName,
-              comments:comments,
-              times:today
-            },
-            success:function(response){
+            $.ajax({
+              url:"/addComment",
+              method:"POST",
+              dataType:"text",
+              data:{
+                eventId:eventId,
+                eventName:eventName,
+                userName:userName,
+                comments:comments,
+                times:today
+              },
+              success:function(response){
                 alert("posted sucessfully");
                 $('#comment').val("");
-                //alert($('#comment').val())
-              var data = JSON.parse(response);
-              for(var i=0;i<data.length;i++) {
-  {{!-- var html = [];
-    html.push("<li class='media'><a href='#'' class='pull-left' id='img'>");
- html.push("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle> </a>");
-html.push("<div class='media-body'><span class='text-muted pull-right'>");
-html.push("<small class='text-muted' id='times'>"+data[i].time+"</small></span>");
-html.push("<strong class='text-success' id='usernames'></strong> <p id='commentadd'>"+data[i].comments+"</p></div></li>");
-             console.log(html);  --}}
-              //console.log(data[0].time+" "+data[0].eventName+" "+data[0].eventId+" "+data[0].userName+" "+data[0].comments);
-            $('#usernames').html("@"+data[i].userName);
-            $('#times').html("<strong>Posted on:</strong>"+data[i].time);
-            $('#commentadd').html("<strong>Comments:  </strong>"+data[i].comments); 
-            $('#img').html("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle'>");
-
+                var data = JSON.parse(response);
+                for(var i=0;i<data.length;i++) {
+                  $('#usernames').html("@"+data[i].userName);
+                  $('#times').html("<strong>Posted on:</strong>"+data[i].time);
+                  $('#commentadd').html("<strong>Comments:  </strong>"+data[i].comments); 
+                  $('#img').html("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle'>");
+                }
               }
-
-            }
-          
-
           });
-
-           
           },2000);
           }); 
-      
-
-      });
+       });
       </script>
-  
-    {{!-- <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i> --}}
-<input type="hidden" name="status" value="" id="status" />
-  <i  class="fa fa-thumbs-up" id="myid" style="color: {{color1}};"></i>
-      <p id="like" style="position: absolute;top:210px;left:80px;"><strong>LIKES :{{likes}}</strong></p>
 
+  <input type="hidden" name="status" value="" id="status" />
+  <i  class="fa fa-thumbs-up" id="myid" style="color: {{color1}};"></i>
+  <p id="like" style="position: absolute;top:210px;left:80px;">
+  <strong>LIKES :{{likes}}</strong></p>
   <input type="hidden" name="like" value="{{likes}}" id="likeid" />
   <script>
-              var cnt = {{ likes }};
-
-       $("#myid").click(function() { 
+    var cnt = {{ likes }};
+    $("#myid").click(function() { 
+      document.getElementById("myid").style.color = "{{color2}}";
+        if (cnt < {{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+          cnt = cnt + 1;
+          document.getElementById("likeid").value = cnt
+          var para = document.getElementById("like");
+          para.innerHTML = "LIKES :" + cnt;
+          para.style.bold;
+          document.getElementById("status").value=document.getElementById("myid").style.color;
           document.getElementById("myid").style.color = "{{color2}}";
-          if (cnt < {{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
-            cnt = cnt + 1;
-            document.getElementById("likeid").value = cnt
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-            document.getElementById("myid").style.color = "{{color2}}";
-          } else if(cnt >={{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
-              cnt = cnt - 1;
-              var para = document.getElementById("like");
-              para.innerHTML = "LIKES :" + cnt;
-              para.style.bold;
-              document.getElementById("likeid").value = cnt
-              document.getElementById("myid").style.color = "{{color1}}";
-              document.getElementById("status").value=document.getElementById("myid").style.color;
-          } else if(cnt == {{ likes }}  && document.getElementById("myid").style.color == "black") {
-            cnt = cnt - 1;
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("likeid").value = cnt;
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-            document.getElementById("myid").style.color = "{{color2}}";
-          } else if(cnt >={{ likes }}-1  &&document.getElementById("myid").style.color == "black"){
-            cnt = cnt+1;
-            document.getElementById("likeid").value = cnt
-            var para = document.getElementById("like");
-            para.innerHTML = "LIKES :" + cnt;
-            para.style.bold;
-            document.getElementById("myid").style.color = "{{color1}}";
-            document.getElementById("status").value=document.getElementById("myid").style.color;
-          }
+        } else if(cnt >={{ likes }} +1 && document.getElementById("myid").style.color == "blue") {
+          cnt = cnt - 1;
+          var para = document.getElementById("like");
+          para.innerHTML = "LIKES :" + cnt;
+          para.style.bold;
+          document.getElementById("likeid").value = cnt
+          document.getElementById("myid").style.color = "{{color1}}";
+          document.getElementById("status").value=document.getElementById("myid").style.color;
+        } else if(cnt == {{ likes }}  && document.getElementById("myid").style.color == "black") {
+          cnt = cnt - 1;
+          var para = document.getElementById("like");
+          para.innerHTML = "LIKES :" + cnt;
+          para.style.bold;
+          document.getElementById("likeid").value = cnt;
+          document.getElementById("status").value=document.getElementById("myid").style.color;
+          document.getElementById("myid").style.color = "{{color2}}";
+        } else if(cnt >={{ likes }}-1  &&document.getElementById("myid").style.color == "black"){
+          cnt = cnt+1;
+          document.getElementById("likeid").value = cnt
+          var para = document.getElementById("like");
+          para.innerHTML = "LIKES :" + cnt;
+          para.style.bold;
+          document.getElementById("myid").style.color = "{{color1}}";
+          document.getElementById("status").value=document.getElementById("myid").style.color;
+        }
       
       $.ajax({
         type: "POST",
         url: "/liked?likes={{likes}}&username={{username}}",
         data: {
-          //'id':"dghjkj"
           'id': "{{eventId}}",
           'like':$('#likeid').val(),
           'userName': "{{username}}",
@@ -328,11 +281,7 @@ html.push("<strong class='text-success' id='usernames'></strong> <p id='commenta
       })
       }); 
       </script>
-  
-
 </div>
+</body>
 
-
-            </body>
-    </head>
-    </html>
+</html>

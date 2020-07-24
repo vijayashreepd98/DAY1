@@ -1,4 +1,5 @@
-<html><head>
+<html>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=100, initial-scale=1">
     <meta charset="utf-8">
@@ -26,15 +27,15 @@
         $('#delete').click(()=>{
             alert("Event deleted  successfully!!!!...");
      });
- }); --}}
- Handlebars.registerHelper("if_eq", function(value1,value2,option){
-   if(value1%value2==0&&value1!=0){
-     return option.fn(this);
-   }else{
-     option.inverse(this);
-   }
-   }
- })
+     }); --}}
+    Handlebars.registerHelper("if_eq", function(value1,value2,option){
+      if(value1%value2==0&&value1!=0){
+        return option.fn(this);
+      }else{
+        option.inverse(this);
+      }
+    }
+ });
 </script>
 
 <style>
@@ -142,49 +143,46 @@ h1, h2{
 }
 
 </style>
+ 
 </head>
 <body>
 <div class="topnav">
-  <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM </i></a>
+  <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM ..THIS IS YOUR TICKET PURCHASED HISTORY</i></a> 
   <div class="topnav-right">
-    <a href="/soldTicketList?username={{username}}">Purchased ticket</a>
-    <a href="/">LOGOUT</a>
+     <a href="/purchaseToHome?username={{username}}">PREVIOUS</a>
+     <a href="/">LOGOUT</a>
   </div>
 </div>
-
 <table class="table table-hover">
   <div class="container">
     <div class="row justify-content-center">
-      <table>
-        <tr>  
-    {{#each events}}
-    {{#if_eq @key 3}}
-      </tr>
-      <tr>
-    {{/if_eq}}
-    <td>  
-      <div class='col-md-4'>
-        <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
-          <div class='card shadow' style='width: 40rem';>
-            <div class='inner'>
-              <img src="{{this.image}}" class='card-img-top' >  
-            </div>
-    <div class='card-body text-center'>
-    <h2 class='card-title'>{{this.description}}</h2>
-    <p class='card-text'>Available tickets:{{this.maxNoOfTicket}}</p>
-    <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
-    <h2 class='card-text'>COST:{{this.cost}}</h2>
-    <a href='/viewMore?image={{this.image}}&likes={{this.likes}}&username={{../username}}&eventId={{this._id}}&eventName={{this.eventName}}&description={{this.description}}&maxNoOfTicket={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>View More....</a>
-     
+      <tr>  
+       {{#each soldTicket}}
+       {{#if_eq @key 3}}
+        </tr>
+        <tr>
+       {{/if_eq}}
+  <td>
+    <div class='col-md-4'>
+      <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
+        <div class='card shadow' style='width: 40rem';>
+          <div class='inner'>
+            <img src="{{this.image}}" class='card-img-top' >  
           </div>
-          </div>
+        <div class='card-body text-center'>
+          <h2 class='card-title'>{{this.description}}</h2>
+          <p class='card-text'>No of Purchased Ticket:{{this.noOfTicket}}</p>
+          <p class='card-text'>Ticket booked at {{this.bookingTime}} </p>
+          <p class='card-text'>Cost:{{this.cost}}</p>
+          <h2 class='card-text'>PAID amount:{{this.paid}}</h2>
         </div>
-        </td>  
-{{/each}}  
-      </table>
+      </div>
     </div>
+  </td>
+ {{/each}}  
+  </table>
   </div>
+</div>
 </body> 
 
 </html> 

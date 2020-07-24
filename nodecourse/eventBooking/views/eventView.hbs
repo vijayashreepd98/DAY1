@@ -30,7 +30,7 @@
 </script>
 
 <style>
-    #back{
+      #back{
         position: absolute;
         top:10px;
         right: 30px;
@@ -38,7 +38,8 @@
         height: 60px;
     }
     table{
-        margin: 60px;
+        margin: 30px;
+        margin-top: 10px;
     }
       
     table th{
@@ -90,16 +91,62 @@ h1, h2{
     color: blue;
 
 }
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
+.inner:hover img{
+  transform :scale(1.5);
+}
+.inner img{
+  transition:all 1.5s ease;
+  }
+  .inner{
+  overflow:hidden;
+
+  
+}
 </style>
  
 </head>
 <body>
-<table class="table table-hover">
+  <div class="topnav">
+      <a class="active" href="#home"><i>WELCOME TO EVENT MANAGEMNET SYSTEM </i></a>
     
-    {{!-- <thead><tr><th>EVENT NAME</th><th>DESCRIPTION</th><th>AVAILABLE TICKET</th><th>BOOKING START TIME</th><th>BOOKING END TIME</th><th>COST</th><th>image<th></tr></thead> --}}
- <h1>WELCOME</h1>  
-<h2>EVENT BOOKING SYSTEM</h2>
-<div class="container">
+  
+  <div class="topnav-right">
+    <a href="/adminAddingEvent" onclick="goBack()">ADD NEW EVENT</a>
+  
+     <a href="/">LOGOUT</a>
+  </div>
+    </div>
+<table class="table table-hover">
+  <h1>WELCOME</h1>  
+  <h2>EVENT BOOKING SYSTEM</h2>
+ <div class="container">
       <div class="row justify-content-center">
         <table>
             <tr>   
@@ -111,33 +158,31 @@ h1, h2{
 
 <td><div class='col-md-4'>
      <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
-          <div class='card shadow' style='width: 40rem';>
-            <div class='inner'>
-           <img src="{{this.image}}" class='card-img-top' >";  
-  {{!-- //<img src='add1.php' class='card-img-top' alt='keralaimage'> --}}
-</div>
+        <div class='card shadow' style='width: 40rem';>
+          <div class='inner'>
+           <img src="{{this.image}}" class='card-img-top' >  
+          </div>
   <div class='card-body text-center'>
     <h2 class='card-title'>{{this.description}}</h2>
     <p class='card-text'>Available tickets:{{this.maxNoOfTicket}}</p>
-     <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
-     <h2 class='card-text'>COST:{{this.cost}}</h2>
+    <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
+    <h2 class='card-text'>COST:{{this.cost}}</h2>
     <a href='/editEvent?eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}"' class='btn btn-success'>Editing event.....</a>
-     <a href='/deleteEvent?eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}"' class='btn btn-success'>Deleting event.....</a>
+     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>Editing event.....</a>
+    <a href='/eventStatus?image={{this.image}}&eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
+     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>STATUS</a>
+    <a href='/deleteEvent?eventName={{this.eventName}}&description={{this.description}}&tickets={{this.maxNoOfTicket}}
+     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>Deleting event.....</a>
+    
   </div>
 </div>
-</div></td>
-
-    {{!-- <tr><td>{{this.eventName}}</td><td>{{this.description}}</td><td>{{this.maxNoOfTicket}}</td>
-    <td>{{this.bookingStartTime}}</td><td>{{this.bookingEndTime}}</td><td>{{this.cost}}</td><td><img src="{{this.image}}" width="50px" height="100px"/></td></tr></tr> --}}
-{{/each}}  
-        </table></div></div>
-    
-{{!-- </table> --}}
- <a href="/adminAddingEvent"><button type="button" onclick="goBack()" class="btn btn-success" id="back">ADD NEW EVENT</button>
+</div>
+</td>
+  {{/each}}  
+  </table>
+  </div>
+  </div>
 </a>
 </body> 
 
 </html> 
-

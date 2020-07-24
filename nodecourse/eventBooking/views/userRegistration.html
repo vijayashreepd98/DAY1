@@ -26,81 +26,8 @@ body{
         left:50px;
     }
 
-   
-            /* .container {
-             background-color: gray;
-             width:350px;
-             height:350px; 
-             margin-top: 130px;
-             margin-left: 550px;
-             border-radius: 10px; 
-             box-shadow: 1px 1px 1px orange; 
-            }
 
-            .in {
-                padding-top: 20px;
-                padding-left: 10px;
-                margin-top: 10px;
-                text-align: center;
-
-            }
-
-            #name { 
-                padding-top: 20px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-            #pass{
-             
-                padding-top: 20px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-            
-            }
-
-            #btn {
-                width: 120px;
-                height: 40px;
-                font-size: 24px;
-                border-radius: 10px;
-                background-color: lightseagreen;
-            } */
-        </style>
-        <script>
-//             $(function(){
-//     $(document).on('submit', 'form', function(e){
-//         e.preventDefault();
-//         var name = $('input[name="uname"]').val() ;
-//         var password = $('input[name="password"]').val();
-//         var cpassword = $('input[name="cpassword"]').val();
-
-//         var submit = $('input[name = "submit"]').val();
-//         if(password !== cpassword){
-//           alert("PASSWORD MISMATCHING!!...");
-//         } else {
-        
-//     var conn=$.ajax({
-//       type:'POST',
-//       url:'/userRegistration',
-//       data :{
-//           name :name,
-//           password: password
-//       },
-//     //   success:function(res){
-//     //     alert("REGISTRATION SUCCESSFULL!!!");
-       
-        
-//     //   },error: function(err){
-//     //       alert("REGISTRATION FAILED!!!....");
-//     //   }
-//     });
-    
-//     }
-
-//     });
-// });
-        </script>
-
+    </style>
     </head>
     <body>
     <h1 style="text-align: center;color:deeppink;padding-top: 30PX;">USER REGISTRATION</h1>
@@ -109,19 +36,16 @@ body{
         <form action = "/userRegistration" method="post" id="login">
             <h2 style="text-align: center;color:rebeccapurple;">REGISTRATION PAGE</h2 >
             <div class="form-group row">
-                <!-- <label for="inputEmail" class="col-sm-2 col-form-label"><strong>UserName</strong></label> -->
                 <div class="col-sm-10" style="position: relative;left:30px;">
                     <input type="text" class="form-control" id="inputEmail" placeholder="Enter Username"name = "uname"  required>
                 </div>
             </div>
             <div class="form-group row">
-                <!-- <label for="inputPassword" class="col-sm-2 col-form-label"><strong>Password</strong></label> -->
                 <div class="col-sm-10" style="position: relative;left:30px;">
                     <input type="password" class="form-control" id="inputPassword" placeholder="Enter Password" name= "password" required>
                 </div>
             </div>
             <div class="form-group row">
-                <!-- <label for="inputPassword" class="col-sm-2 col-form-label"><strong>Confirm Password</strong></label> -->
                 <div class="col-sm-10"style="position: relative;left:30px;">
                     <input type="password" class="form-control" id="inputPassword" placeholder="Reenter Password" name= "cpassword" required>
                 </div>
@@ -137,10 +61,6 @@ body{
                     <a href="/userLogin"  style="text-decoration: none;">Already have an account?</a>
                 </div>
             </div>
-            
-
-
-
         </form>
     </div>
     <a href="/" class="btn btn-info btn-lg"id="previous" >

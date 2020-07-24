@@ -10,48 +10,36 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
-    $(document).ready(() => {
-      $("#submit").click((event)=>{
-       //alert("hi");
-       //var stime =$('#stime').val();
-      //  var d = new Date(stime);
-      //  var date = d.getDate();
-      //  var month = d.getMonth()+1; // month will be zero based
-      //   var year = d.getFullYear();
-      //   var hr= d.getHours();
-      //   var minute = d.getMinutes();
-      //   var sec = d.getSeconds();
-      //   var startTime = date+" /"+month+"/"+year+" at :"+hr+":"+minute+":"+sec;
-      //  var fd = new FormData(this);
-      //  fd.append(date,date);
-       //var file = $('#img')[0].files[0].
-       //alert(month)
-       console.log(file)
-      //  fd.append('file',file);
-        $.ajax({
+     $(document).ready(() => {
+     
+     $('#submit1').click(()=>{
+
+let myFormData = new FormData(this);
+myFormData.append('file',$('#img')[0].files[0]);
+//alert(myFormData.file.filename);
+//alert("sucess");
+      $.ajax({
           url:"/addingEvent",
           method:"POST",
           dataType:"text",
           data:
-          new FormData(this),
-          
-          // {
-            
-          //   edetails:$('#edetails').val(),
-          //   ename:$('#ename').val(),
-          //   npeople:$('#npeople').val(),
-          //   stime:$('#etime').val(),
-          //   etime:$('#etime').val(),
-          //   cost:$('#cost').val()
-            
-          // },
-          success:function(response){
-            alert("event added sucessfully!!!....!!");
-            //var data = JSON.parse(response);
-           }
-          });
-        });
-        });
+          myFormData,
+
+         success:function(response,status){
+              // $('#bookedTicket').val(" ");
+                 var data = JSON.parse(response);
+                 if(data[0].message==="fail")
+                 {
+                   alert("sorry...");
+                 }
+                 },
+                 error:function(res,status,err){
+                  
+                 }
+         })          
+   });
+});
+    
     </script>
 
     <style>
@@ -78,13 +66,58 @@
         top:10px;
         left:1130px;
       }
+      #previous{
+        position: absolute;
+        top:10px;
+        left:30px;
+        
+        
+      }
+      .topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
     </style>
     </head>
   <body>
-    <h1 style ="text-align: center;">WELCOME TO ADMIN PAGE</h1>
+    <div class="topnav">
+      <a class="active" href="#home"><i>WELCOME TO ADMIN PAGE </i></a>
+    
+  
+  <div class="topnav-right">
+    
+    <a href="/eventAddingToEventlist">PREVIOUS</a>
+     <a href="/">LOGOUT</a>
+  </div>
+    </div>
+    <h1 style ="text-align: center;"></h1>
     <h2 style = "text-align:  center;color:green">ADDING EVENT DETAILS</h2>
+    </div>
     <div class="bs-example">
-    <form method = "post" action ="/addingEvent" enctype = "multipart/form-data"       class="form-horizontal" id="registration">
+    <form method = "post" action ="/addingEvent" enctype = "multipart/form-data"       class="form-horizontal" id="registration"> 
     <div class="form-group row">
       <label for="inputEmail" class="col-sm-2 col-form-label"><strong>EventName</strong></label>
         <div class="col-sm-10">
@@ -130,43 +163,13 @@
 
     <div class="form-group row">
       <div class="col-sm-10 offset-sm-2">
-        <button  class="btn btn-primary" id= "submit" name ="submit">ADD EVENT</button>
+        <button  class="btn btn-primary" id= "submit1" name ="submit1">ADD EVENT</button>
       </div>
     </div>
-   
-
-
-
-
-
-
-        <!-- <table>
-          <caption>EVENTS</caption>
-          <div class = "textbox">
-          <tr><td>EVENT NAME:</td><td><input type="text"name="ename" /></td></tr>
-          <tr><td>DESCRIPTION:</td><td><input type="text"name="edetails"></td></tr>
-          <tr><td>MAXIMUM NUMBER OF TICKET:</td><td><input type="number"name="npeople"></td></tr>
-          <tr><td>BOOKING START TIME:</td><td><input type="datetime-local"  value="2020-01-12T19:30:13.828Z" name = "stime"/></td></tr>
-          <tr><td>BOOKING END TIME:</td><td><input type="datetime-local" value="2020-01-13T19:30:13.828Z" name="etime"/></td></tr>
-          <tr><td>TICKET COST:</td><td><input type="number"name="cost"/></td></tr>
-          
-          <tr><td colspan="2"></td></tr>
-        </div>
-
-
-        </table>
-        <input type = "submit" name ="submit" value ="ADD"id ="btn"/> -->
+  
       </fieldset>
       </form>
     </div>
-      <!-- <a href = "/viewEvent"style="text-decoration:none"><button id="btn1">VIEW EVENT</button></a> -->
-      
-      
-      
-
-        <a href="/" class="btn btn-info btn-lg" id="logout">
-          <span class="glyphicon glyphicon-log-out"></span> Log out
-        </a>
-        </body>
+  </body>
 
 </html>
