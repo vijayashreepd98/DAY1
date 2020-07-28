@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-const ticketSoldModel = mongoose.model('soldTicket', {
+let ticketSoldModel = mongoose.model('soldTicket', {
   userName: {
     type: String,
     trim: true,

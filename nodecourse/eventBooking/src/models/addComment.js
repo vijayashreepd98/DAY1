@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-const addCommentModel = mongoose.model('comments', {
+let addCommentModel = mongoose.model('comments', {
   eventName: {
     type:String
   },
