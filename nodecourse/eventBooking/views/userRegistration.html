@@ -1,72 +1,106 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <style>
-body{
-    background-color: aquamarine;
-}
-.bs-example{
-        margin-top: 100px;
-        margin-left: 480px;
-        width: 400px;
-        height: 350px;
-       
-        border: 2px solid #fff; 
-        border-radius: 20px; 
-        padding:40px;
-        background-color: antiquewhite;
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+    body{
+      background-color: aquamarine;
     }
-#previous{
-        position: absolute;
-        top:20px;
-        left:50px;
+    .bs-example{
+      margin-top: 100px;
+      margin-left: 480px;
+      width: 400px;
+      height: 350px;
+      border: 2px solid #fff; 
+      border-radius: 20px; 
+      padding:40px;
+      background-color: antiquewhite;
     }
-
-
+    #previous{
+      position: absolute;
+      top:20px;
+      left:50px;
+    }
     </style>
-    </head>
-    <body>
-    <h1 style="text-align: center;color:deeppink;padding-top: 30PX;">USER REGISTRATION</h1>
-        <div class="bs-example">
+    <script>
+      function fun(){
+        let username = $('#inputEmail').val();
+        let password = $('#inputPassword1').val();
+        let conformpassword = $('#inputPassword2').val();   
+        if(password !== conformpassword){
+          alert("Password mismatching!!!!...");
+          window.location.reload();
+        }else{
+          if(username ==="undefined"||password=="undefined"||conformpassword=="undefined"){
+            alert("Please provide valid credential!!!...");
+            window.location.reload();
+          }
+          $.ajax({
+            url:"/userRegistration",
+            type:"POST",
+            data:{
+              username:username,
+              password:password
+           },
+            success:function(response){
+              if(response=="success"){
+                alert("Registration Successful!!!....");
+                window.location.href="/userHomePage?username="+username;
+              }
+              if( response=="error"){
+                alert("Registration failed!!!\nPlease try  again after some time...");
+                window.location.reload();
+              }
+              if(response=="USER ALREADY EXISTS!!!..."){
+                alert(response);
+                window.location.reload();
+              }
+            }
 
-        <form action = "/userRegistration" method="post" id="login">
-            <h2 style="text-align: center;color:rebeccapurple;">REGISTRATION PAGE</h2 >
-            <div class="form-group row">
-                <div class="col-sm-10" style="position: relative;left:30px;">
-                    <input type="text" class="form-control" id="inputEmail" placeholder="Enter Username"name = "uname"  required>
-                </div>
+          });
+        }
+      }
+  </script>
+
+  </head>
+
+  <body>
+    <h1 style="text-align: center;color:deeppink;padding-top: 30PX;">USER REGISTRATION</h1>
+      <div class="bs-example">
+        <h2 style="text-align: center;color:rebeccapurple;">REGISTRATION PAGE</h2 >
+          <div class="form-group row">
+            <div class="col-sm-10" style="position: relative;left:30px;">
+             <input type="text" class="form-control" id="inputEmail" placeholder="Enter Username"name = "uname"  required>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-10" style="position: relative;left:30px;">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Enter Password" name= "password" required>
-                </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-10" style="position: relative;left:30px;">
+              <input type="password" class="form-control" id="inputPassword1" placeholder="Enter Password" name= "password" required>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-10"style="position: relative;left:30px;">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Reenter Password" name= "cpassword" required>
-                </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-10"style="position: relative;left:30px;">
+              <input type="password" class="form-control" id="inputPassword2" placeholder="Reenter Password" name= "cpassword" required>
             </div>
-            <div class="form-group row" style="position: relative;left:50px;">
-                <div class="col-sm-10 offset-sm-2">
-                    <button type="submit" class="btn btn-primary" name = "submit">REGISTER</button>
-                </div>
+          </div>
+          <div class="form-group row" style="position: relative;left:50px;">
+            <div class="col-sm-10 offset-sm-2">
+              <button type="submit" class="btn btn-primary" name = "submit" onclick="fun()">REGISTER</button>
             </div>
-            
-            <div class="form-group row"style="position: relative;left:80px;" >
-                <a class="col-sm-10 offset-sm-2">
-                    <a href="/userLogin"  style="text-decoration: none;">Already have an account?</a>
-                </div>
-            </div>
-        </form>
-    </div>
+          </div>
+          <div class="form-group row"style="position: relative;left:80px;" >
+            <a class="col-sm-10 offset-sm-2">
+              <a href="/userLogin"  style="text-decoration: none;">Already have an account?</a>
+          </div>
+        </div>
+      </div>
     <a href="/" class="btn btn-info btn-lg"id="previous" >
-        <span class="glyphicon glyphicon-log-out"></span> PREVIOUS
-      </a>
-    </body>
+      <span class="glyphicon glyphicon-log-out"></span> PREVIOUS
+    </a>
+  </body>
 </html>
 
 

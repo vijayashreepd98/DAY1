@@ -1,4 +1,5 @@
-<html><head>
+<html>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=100, initial-scale=1">
     <meta charset="utf-8">
@@ -22,170 +23,165 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script>
-    {{!-- $(document)ready(function(){
-        $('#delete').click(()=>{
-            alert("Event deleted  successfully!!!!...");
-     });
- }); --}}
- Handlebars.registerHelper("if_eq", function(value1,value2,option){
-   if(value1%value2==0&&value1!=0){
-     return option.fn(this);
-   }else{
-     option.inverse(this);
-   }
-   }
- })
-</script>
+    
+      Handlebars.registerHelper("if_eq", function(value1,value2,option){
+        if(value1%value2==0&&value1!=0){
+          return option.fn(this);
+        }else{
+          option.inverse(this);
+        }
+      
+      });
+    </script>
 
-<style>
-  body{
-    background-color: #FFF5EE;
-  }
-    #back{
+    <style>
+      body{
+        background-color: #FFF5EE;
+      }
+      #back{
         position: absolute;
         top:10px;
         right: 30px;
         width: 140px;
         height: 60px;
-    }
-    table{
+      }
+      table{
         margin: 30px;
         margin-top: 10px;
-    }
+      }
       
-    table th{
+      table th{
         color:white;
         background-color: black;
       
-  }
-  @media screen and (max-width: 1000px) {
-  .topnav a:not(:first-child) {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-}
+      }
+      @media screen and (max-width: 1000px) {
+        .topnav a:not(:first-child) {display: none;}
+        .topnav a.icon {
+        float: right;
+        display: block;
+        }
+      }
 
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-@media screen and (max-width: 1000px) {
-  .topnav.responsive {position: relative;}
-  .topnav.responsive a.icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-}
-.slides{
-  margin-top:10px;
-  margin-left:100px;
-}
-a:hover{
-  text-decoration: none;
-}
-.slides1{
-  margin-top:10px;
-  margin-left:100px;
-}a{
-  text-transform: uppercase;
-}
+      @media screen and (max-width: 1000px) {
+        .topnav.responsive {position: relative;}
+        .topnav.responsive a.icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+      }
+      .slides{
+        margin-top:10px;
+        margin-left:100px;
+      }
+      a:hover{
+      text-decoration: none;
+      }
+      .slides1{
+        margin-top:10px;
+        margin-left:100px;
+      }
+      a{
+        text-transform: uppercase;
+      }
 
-.container table,th,tr{
-  margin-bottom:100px;
-}
-h1, h2{
-    text-align: center;
-    color: blue;
+      .container table,th,tr{
+        margin-bottom:100px;
+      }
+      h1, h2{
+        text-align: center;
+        color: blue;
 
-}
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
 
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
 
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
 
-.topnav a.active {
-  background-color: #4CAF50;
-  color: white;
-}
+      .topnav a.active {
+        background-color: #4CAF50;
+        color: white;
+      }
 
-.topnav-right {
-  float: right;
-}
-.inner:hover img{
-  transform :scale(1.5);
-}
-.inner img{
-  transition:all 1.5s ease;
-  }
-  .inner{
-  overflow:hidden;
+      .topnav-right {
+        float: right;
+      }
+      .inner:hover img{
+       transform :scale(1.5);
+      }
+      .inner img{
+        transition:all 1.5s ease;
+      }
+      .inner{
+        overflow:hidden;
+      }
 
-  
-}
+    </style>
+  </head>
 
-</style>
-</head>
+
 <body>
-<div class="topnav">
-  <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM </i></a>
-  <div class="topnav-right">
-    <a href="/soldTicketList?username={{username}}">Purchased ticket</a>
-    <a href="/">LOGOUT</a>
+  <div class="topnav">
+    <a class="active" href="#home"><i>WELCOME {{username}} FOR EVENT MANAGEMENT SYSTEM </i></a>
+    <div class="topnav-right">
+      <a href="/soldTicketList?username={{username}}">Purchased ticket</a>
+      <a href="/">LOGOUT</a>
+    </div>
   </div>
-</div>
 
-<table class="table table-hover">
-  <div class="container">
-    <div class="row justify-content-center">
-      <table>
-        <tr>  
-    {{#each events}}
-    {{#if_eq @key 3}}
-      </tr>
-      <tr>
-    {{/if_eq}}
-    <td>  
-      <div class='col-md-4'>
-        <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
-          <div class='card shadow' style='width: 40rem';>
-            <div class='inner'>
-              <img src="{{this.image}}" class='card-img-top' >  
+  <table class="table table-hover">
+    <div class="container">
+      <div class="row justify-content-center">
+        <table>
+          <tr>  
+          {{#each events}}
+          {{#if_eq @key 3}}
+            </tr>
+            <tr>
+          {{/if_eq}}
+          <td>  
+            <div class='col-md-4'>
+              <h3  style="text-align: center,color:red;"><strong>{{this.eventName}}</strong></h3>
+                <div class='card shadow' style='width: 40rem';>
+                  <div class='inner'>
+                    <img src="{{this.image}}" class='card-img-top' >  
+                  </div>
+                  <div class='card-body text-center'>
+                    <h2 class='card-title'>{{this.description}}</h2>
+                    <p class='card-text'>Available tickets:{{this.maxNoOfTicket}}</p>
+                    <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
+                    <h2 class='card-text'>COST:{{this.cost}}</h2>
+                    <a href='/viewMore?image={{this.image}}&likes={{this.likes}}&username={{../username}}&eventId={{this._id}}&eventName={{this.eventName}}&description={{this.description}}&maxNoOfTicket={{this.maxNoOfTicket}}
+                    &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>View More....</a>
+                  </div>
+                </div>
             </div>
-    <div class='card-body text-center'>
-    <h2 class='card-title'>{{this.description}}</h2>
-    <p class='card-text'>Available tickets:{{this.maxNoOfTicket}}</p>
-    <p class='card-text'>Booking starts from:{{this.bookingStartTime}},  </p><p class="card-text">to:{{this.bookingEndTime}}</p>
-    <h2 class='card-text'>COST:{{this.cost}}</h2>
-    <a href='/viewMore?image={{this.image}}&likes={{this.likes}}&username={{../username}}&eventId={{this._id}}&eventName={{this.eventName}}&description={{this.description}}&maxNoOfTicket={{this.maxNoOfTicket}}
-     &bookingStartTime={{this.bookingStartTime}}&bookingEndTime={{this.bookingEndTime}}&cost={{this.cost}}' class='btn btn-success'>View More....</a>
-     
-          </div>
-          </div>
-        </div>
-        </td>  
-{{/each}}  
+          </td>  
+        {{/each}}  
       </table>
     </div>
   </div>
 </body> 
-
 </html> 
 

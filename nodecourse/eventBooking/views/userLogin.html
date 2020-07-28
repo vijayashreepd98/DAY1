@@ -9,15 +9,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
-body{
-  background-color:palegreen
-}
+    body{
+      background-color:palegreen
+    }
     .bs-example{
       margin-top: 150px;
       margin-left: 450px;
       width: 400px;
-      height: 330px;
-       
+      height: 330px; 
       border: 1px solid #fff; 
       border-radius: 20px; 
       padding:40px;
@@ -31,49 +30,52 @@ body{
 
     </style>
     <script>
-    $(document).ready(() => {
-      $("#submit").click((event)=>{
-      
-        $.ajax({
-          url:"/userLogin",
-          method:"POST",
-          dataType:"text",
-          data:{
-            name:$('#inputEmail').val(),
-            password:$('#inputPassword').val(),
-            
-          },
-           success:function(response){
-                 
+    function fun(){
+      $.ajax({
+        url:"/userLogin",
+        method:"POST",
+        dataType:"text",
+        data:{
+          name:$('#inputEmail').val(),
+          password:$('#inputPassword').val(),   
+        },
+        success:function(response){
+          if(response == "success"){
+            alert("Logged in successfully!!...");
+            window.location.href="/userHomePage?username="+$('#inputEmail').val();
           }
-         } );
-        });
-        });
-        </script>
+          if(response == "fail"){
+            alert("LOGIN FAILED...\n Please try again!!!...");
+            window.location.reload();
+          }  
+        }
+      });
+
+    }
+  </script>
   </head>
+
   <body>
     
     <div class="bs-example">
-      <form action = "/userLogin" method="post" id="login">
-        <h2 style="text-align: center;color:rebeccapurple;">LOGIN PAGE</h2 >
-          <div class="form-group row">
-              <div class="col-sm-10" style="position: relative;left:40px;">
-                <input type="text" class="form-control" id="inputEmail" placeholder="Enter Username"name = "uname"  required>
-              </div>
-          </div>
-          <div class="form-group row">
-              <div class="col-sm-10"style="position: relative;left:40px;">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Enter Password" name= "password" required>
-              </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-10 offset-sm-2"style="position: relative;left:60px;top:10px;">
-              <button type="submit" class="btn btn-primary" name = "submit" id="submit">Sign in</button>
-            <div>
+      <h2 style="text-align: center;color:rebeccapurple;">LOGIN PAGE</h2 >
+        <div class="form-group row">
+          <div class="col-sm-10" style="position: relative;left:40px;">
+            <input type="text" class="form-control" id="inputEmail" placeholder="Enter Username"name = "uname"  required>
           </div>
         </div>
+        <div class="form-group row">
+          <div class="col-sm-10"style="position: relative;left:40px;">
+            <input type="password" class="form-control" id="inputPassword" placeholder="Enter Password" name= "password" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10 offset-sm-2"style="position: relative;left:60px;top:10px;">
+            <button type="submit" class="btn btn-primary" name = "submit" id="submit" onclick="fun()">Sign in</button>
+          <div>
+        </div>
+      </div>
     </div>
-  </form>
   </div>
   <a href="/" class="btn btn-info btn-lg"id="previous" >
     <span class="glyphicon glyphicon-log-out"></span> PREVIOUS
