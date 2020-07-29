@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require("express-session");
 const validator = require('validator');
 const bodyParser = require('body-parser');
 const handlebars     = require('handlebars');
@@ -20,7 +21,9 @@ const bookedTickets = require('./src/models/ticketModel.js');
 const { doesNotMatch } = require('assert');
 const { send } = require('process');
 
-
+app.use(session({
+  secret:"vijaya"
+}));
 
 app.set('view engine', 'hbs');
 
@@ -75,6 +78,8 @@ app.get('/adminLogin',(req, res) => {
 app.post('/adminLogin',async(req,res,next) => {
   let name = req.body.username;
   let password = req.body.password;
+  req.session.name = name;
+  req.session.password = password;
 
 
   if( name === 'admin' && password === 'admin') {
@@ -105,6 +110,7 @@ app.get('/adminHome',async(req,res) => {
           events: events
         });
       } 
+    
 });
 
 //ADMIN ADDING NEW EVENTS
@@ -228,18 +234,33 @@ app.get('/userRegistration',(req, res) => {
 app.post('/userRegistration', async(req, res) => {
   let name = req.body.username;
   let password = req.body.password;
+  
   let registered = await customerModel.findOne({name:name});
     if(registered){
        res.send("USER ALREADY EXISTS!!!...");
     }
     else{
+      let events = await eventList.find({
+        
+      },{
+        eventName:1
+      });
+      for(let i=0;i<events.length;i++){
+        let newUser = await new eventStatus({
+          eventName: events[i].eventName,
+          userName: name,
+          status: false,
+      });
+      newUser.save();
+      }
       const register = new customerModel({
       name: name,
       password: password
     });
     
     register.save().then(async() => {
-       
+      req.session.name = name;
+      req.session.password = password;
       res.send("success");
     }).catch(() => {
       res.send("fail");
@@ -251,6 +272,8 @@ app.post('/userRegistration', async(req, res) => {
 
 //USER HOME PAGE
 app.get("/userHomePage",async(req,res) =>{
+  if(req.session.name){
+    
   let day = new Date();
   let today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
   ':'+day.getMinutes()+':'+day.getSeconds();    const events = await eventList.find( { bookingStartTime: { $lte: today } ,
@@ -272,6 +295,7 @@ app.get("/userHomePage",async(req,res) =>{
       username:req.query.username
       });
     }
+  }
 });
 
 //USER LOGIN 
@@ -284,12 +308,17 @@ app.get('/userLogin',(req, res) => {
 app.post('/userLogin',async(req,res)=> {
   let name = req.body.name;
   let password = req.body.password;
+  
   let user = await customerModel.findOne( {
     name:name,
     password: password
   });
 
   if(user){
+
+    req.session.name = name;
+    req.session.password =  password;
+    req.session.log
     res.send("success");
   } else {
     res.send("fail")
@@ -298,34 +327,21 @@ app.post('/userLogin',async(req,res)=> {
 
 //USER VIEWING MORE INFORMATION OF PERTICULAR EVENT
 app.get('/viewMore',async(req,res) =>{
+  if(req.session.name){
+
   let comments = await commentList.find({ eventName: req.query.eventName,
     eventId:req.query.eventId
    });
-   let  events  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
-  });
+   const  allEvents  = await  eventStatus.findOne( {eventName: req.query.eventName,userName: req.query.username 
+    });
   
-  if (events.length===0) {
-    let newUser = new eventStatus({
-      eventName: req.query.eventName,
-      userName: req.query.username,
-      status: false,
-  });
   
-  newUser.save().then(( ) => {
-    console.log("success");
-  }).catch(()=>{
-    console.log("sory");
-  });
-  }
-  const  allEvents  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
-  });
-  
-
+console.log(allEvents.status);
   let color1, color2;
   if(!allEvents){
    return  res.send("try again");
   }
-  if (allEvents[0].status === true) {
+  if (allEvents.status === true) {
     color1 = "blue";
     color2 = "black"
   } else {
@@ -344,17 +360,20 @@ app.get('/viewMore',async(req,res) =>{
     comments:comments,
     eventId:req.query.eventId,
     likes: req.query.likes,
-    status: allEvents[0].status,
+    status: allEvents.status,
     color1: color1,
     color2: color2,
     image:req.query.image
 
  });
 
+  }
 });
 
 //PREVIOUS BUTTON FROM BOOKING EVENT DETAILS TO USER HOME PAGE
 app.get('/bookingToHome',async(req,res)=>{
+  if(req.session.name){
+
   let comments = await commentList.find({ eventName: req.query.eventName,
     eventId:req.query.eventId
   });
@@ -408,11 +427,13 @@ app.get('/bookingToHome',async(req,res)=>{
     image:req.query.image
 
   });
-
+  }
 });
 
 //EVENT STATUS UPFDATED FOR PERTICULAR EVENT WITH RESPECT TO PERTICULAR EVENT
 app.post('/liked',async (req,res)=>{
+  if(req.session.name){
+
   let event = await eventList.findOneAndUpdate({
     _id: req.body.id
   }, {
@@ -434,13 +455,14 @@ app.post('/liked',async (req,res)=>{
     status: status,
     likes: req.body.like 
     });
-  
+  }
 });
 
 //STORING USER INSERTED COMMET INTO DATABASE WITH USERNAME
 app.post('/addComment', async(req, res) => {
   console.log(req.body.userName); 
-  
+  if(req.session.name){
+
   let addComment = new commentList({
      eventName: req.body.eventName,
      eventId: req.body.eventId,
@@ -459,11 +481,13 @@ app.post('/addComment', async(req, res) => {
     {
      console.log("sorry");
     });
- 
+  }
 });
 
 //USER BUYING EVENT TICKET
 app.get('/buyTicket',(req,res) =>{
+  if(req.session.name){
+
   res.render('userBuyTicket.hbs',{
     description: req.query.description,
     bookingStartTime: req.query.bookingStartTime,
@@ -481,10 +505,13 @@ app.get('/buyTicket',(req,res) =>{
     image:req.query.image
 
     });
+  }
  });
 
  //UPDATING BOOKED TICKET IN DATABASE
 app.post('/bookedTicket',async(req,res) => {
+  if(req.session.name){
+
   let day =new Date();
   let today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
         ':'+day.getMinutes()+':'+day.getSeconds();
@@ -527,11 +554,13 @@ app.post('/bookedTicket',async(req,res) => {
   }).catch(() => {
     return res.jsonp([{message:'ticket booking failed!!!...'}]);
   });
-
+  }
  });
 
  //VIEWING SOLD TICKET LIST
 app.get('/soldTicketList', async(req,res) => {
+  if(req.session.name){
+
   let soldTicket = await bookedTickets.find( {userName: req.query.username
   //bookingStartTime: { $lte: today } ,
   //bookingEndTime: { $gte: today } 
@@ -550,11 +579,13 @@ app.get('/soldTicketList', async(req,res) => {
     username:req.query.username,
    
    });
-
+  }
 });
 
 //PREVIOUS BUTTON FROM PURCHASE HISTORY TO USER HOMW PAGE
 app.get('/purchaseToHome',async(req,res) =>{
+  if(req.session.name){
+
   let events = await eventList.find( { 
     //bookingEndTime: { $gte: today } 
   }, {
@@ -579,13 +610,16 @@ app.get('/purchaseToHome',async(req,res) =>{
     }else{
       //return  res.jsonp([{message:"ticket booked successfuly!!.."}]);
 
-    }            
+    }  
+  }          
 });
 
 
 //PREVIOUS BUTTON FROM VIEW MORE PAGE TO USER HOME PAGE
 
 app.get('/viewMoreToHome',async(req,res) =>{
+  if(req.session.name){
+
   let events = await eventList.find( { 
     //bookingEndTime: { $gte: today } 
   }, {
@@ -610,11 +644,14 @@ app.get('/viewMoreToHome',async(req,res) =>{
     } else {
       //return  res.jsonp([{message:"ticket booked successfuly!!.."}]);
 
-    }            
+    }       
+    }     
 });
 
 //PREVIOUS FROM BOOKING PAGE TO VIEW MORE PAGE 
 app.get('/bookingToviewMore',async(req,res) =>{
+  if(req.session.name){
+
  
   let comments = await commentList.find({ eventName: req.query.eventName,
     eventId:req.query.eventId
@@ -634,9 +671,15 @@ app.get('/bookingToviewMore',async(req,res) =>{
       console.log("sory");
     });
   }
+  let eventLists = await eventList.findOne({
+    eventName:req.query.eventName
+  },{
+    likes:1
+  });
   let  allEvents  =  await eventStatus.find( {eventName: req.query.eventName,userName: req.query.username 
   });
   
+
 
   let color1, color2;
   if(!allEvents){
@@ -660,7 +703,7 @@ app.get('/bookingToviewMore',async(req,res) =>{
     username: req.query.username,
     comments:comments,
     eventId:req.query.eventId,
-    likes: req.query.likes,
+    likes: eventLists.likes,
     status: allEvents[0].status,
     color1: color1,
     color2: color2,
@@ -668,11 +711,13 @@ app.get('/bookingToviewMore',async(req,res) =>{
 
  });
 
-
+  }
 });
 
 //PREVIOUS BUTTON FROM ADMIN EVENT ADDING TO EVENT LIST
 app.get('/eventAddingToEventlist',async(req,res) =>{
+  if(req.session.name){
+
   let events = await eventList.find( { }, {
     eventName: 1,
     description: 1,
@@ -688,9 +733,12 @@ app.get('/eventAddingToEventlist',async(req,res) =>{
       events: events
     });
   } 
+}
 });
 
 app.get('/editingToHome',async(req,res) =>{
+  if(req.session.name){
+
   let events = await eventList.find( { }, {
     eventName: 1,
     description: 1,
@@ -706,9 +754,12 @@ app.get('/editingToHome',async(req,res) =>{
       events: events
     });
   } 
+}
 });
 
 app.get("/eventStatus",async(req,res) => {
+  if(req.session.name){
+
   //console.log(req.query.eventName+""+req.query.image+""+req.query.description);
   let soldTicket = await bookedTickets.find({eventName:req.query.eventName,
   description:req.query.description,
@@ -728,9 +779,12 @@ app.get("/eventStatus",async(req,res) => {
     comments:comments,
     eventName:req.query.eventName
 
-  })
+  });
+}
 });
 app.get('/eventdetailsToeventList',async(req,res )=>{
+  if(req.session.name){
+
   let events = await eventList.find( { }, {
     eventName: 1,
     description: 1,
@@ -746,9 +800,14 @@ app.get('/eventdetailsToeventList',async(req,res )=>{
       events: events
     });
   } 
-
+  }
 });
+app.get('/logout',(req,res)=>{
+  req.session = null;
+    res.redirect('/');
 
+  
+})
 //app.use(express.urlencoded());
 app.use(express.json()); 
 
