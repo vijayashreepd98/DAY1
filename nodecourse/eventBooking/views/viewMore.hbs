@@ -135,7 +135,7 @@
           <div class="panel-body">
             <textarea class="form-control" placeholder="write a comment here..." rows="10" cols="40" name="comment" id="comment"></textarea>
             <br>
-            <button id="btn"class="btn btn-info pull-right">POST
+            <button id="btn"class="btn btn-info pull-right" onclick="fun()">POST
             </button>
             <div class="clearfix"></div>
               <hr>
@@ -173,45 +173,42 @@
     </div>
   </div>
   <script>
-    $(document).ready(() => {
-      $("#btn").click((event)=>{
-        event.preventDefault();
-        setTimeout(function()
-          {                                          /
-          let day =new Date();
-          let today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
+    function fun(){
+      let day =new Date();
+      let today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
                         ':'+day.getMinutes()+':'+day.getSeconds();
-          let eventId ="{{eventId}}"; 
-          let eventName = "{{eventName}}";
-          let userName = "{{username}}";
-          let comments = $('#comment').val(); 
+      let eventId ="{{eventId}}"; 
+      let eventName = "{{eventName}}";
+      let userName = "{{username}}";
+      let comments = $('#comment').val(); 
 
-          $.ajax({
-            url:"/addComment",
-            method:"POST",
-            dataType:"text",
-            data:{
-              eventId:eventId,
-              eventName:eventName,
-              userName:userName,
-              comments:comments,
-              times:today
-            },
-            success:function(response){
-              alert("posted sucessfully");
-              $('#comment').val("");
-              var data = JSON.parse(response);
-              for(var i=0;i<data.length;i++) {
-                $('#usernames').html("@"+data[i].userName);
-                $('#times').html("<strong>Posted on:</strong>"+data[i].time);
-                $('#commentadd').html("<strong>Comments:  </strong>"+data[i].comments); 
-                $('#img').html("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle'>");
-              }
+        $.ajax({
+          url:"/addComment",
+          method:"POST",
+          dataType:"text",
+          data:{
+            eventId:eventId,
+            eventName:eventName,
+            userName:userName,
+            comments:comments,
+            times:today
+          },
+          success:function(response){
+            alert("posted sucessfully");
+            $('#comment').val("");
+            window.location.reload();
+            var data = JSON.parse(response);
+            for(var i=0;i<data.length;i++) {
+              $('#usernames').html("@"+data[i].userName);
+              $('#times').html("<strong>Posted on:</strong>"+data[i].time);
+              $('#commentadd').html("<strong>Comments:  </strong>"+data[i].comments); 
+              $('#img').html("<img src='https://bootdey.com/img/Content/user_2.jpg' alt='' class='img-circle'>");
             }
-          });
-        },2000);
-      }); 
-    });
+          }
+        });
+    }
+      
+    
   </script>
 
   <input type="hidden" name="status" value="" id="status" />
