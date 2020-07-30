@@ -111,6 +111,49 @@ app.get('/adminHome',async(req,res) => {
       } 
     
 });
+app.get('/userRegistration',(req, res) => {
+  
+  res.sendfile('./views/userRegistration.html');
+});
+
+//UPADTING USER CREDENTIAL IN DATABASSE
+app.post('/userRegistration', async(req, res) => {
+  let name = req.body.username;
+  let password = req.body.password;
+  
+  let registered = await customerModel.findOne({name:name});
+    if(registered){
+       res.send("USER ALREADY EXISTS!!!...");
+    }
+    else{
+      let events = await eventList.find({
+        
+      },{
+        eventName:1
+      });
+      for(let i=0;i<events.length;i++){
+        let newUser = await new eventStatus({
+          eventName: events[i].eventName,
+          userName: name,
+          status: false,
+      });
+      newUser.save();
+      }
+      const register = new customerModel({
+      name: name,
+      password: password
+    });
+    
+    register.save().then(async() => {
+      req.session.name = name;
+      req.session.password = password;
+      res.send("success");
+    }).catch(() => {
+      res.send("fail");
+    });
+  }
+
+});
 
 //ADMIN ADDING NEW EVENTS
 app.get('/adminAddingEvent',(req,res) =>{
@@ -143,7 +186,6 @@ app.post('/adminAddingEvent',upload.single('img'),async(req,res) => {
     return res.send("Please upload a file");
 
   }else{
-   // console.log(image);
     if (image === "" || ename === "" || edetails === "" ||npeople === "" ||bookingStartTime === "" || bookingEndTime === "" || cost === "") {
       return res.send('Please provide valid information ..All are mandatory');
     }
@@ -152,9 +194,7 @@ app.post('/adminAddingEvent',upload.single('img'),async(req,res) => {
     },{
       name:1
     });
-   // console.log(customer[0].name);
     for(let i=0;i<customer.length;i++){
-      //console.log(customer[i].name);
       let newUser =  new eventStatus({
         eventName: ename,
         userName: customer[i].name,
@@ -225,12 +265,12 @@ app.post('/deleteEvent', async (req, res) => {
     cost:req.body.cost
 
   });
-  let deletedView = await commentList.findOneAndDelete({
+  let deletedView = await commentList.deleteMany({
     eventName: req.body.eventName 
   });
-  // const eventStatus =  await eventStatus.findAndDelete({
-  //   eventName:req.body.eventName
-  // });
+  let eventStatuss =  await eventStatus.deleteMany({
+     eventName:req.body.eventName
+   });
   if (deletedEvent) {
     return  res.jsonp([{message:"Event deleted successfuly!!.."}]);
   } else {
@@ -239,50 +279,7 @@ app.post('/deleteEvent', async (req, res) => {
 
 });
 
-//USER REGISTRATION PAGE
-app.get('/userRegistration',(req, res) => {
-  
-  res.sendfile('./views/userRegistration.html');
-});
 
-//UPADTING USER CREDENTIAL IN DATABASSE
-app.post('/userRegistration', async(req, res) => {
-  let name = req.body.username;
-  let password = req.body.password;
-  
-  let registered = await customerModel.findOne({name:name});
-    if(registered){
-       res.send("USER ALREADY EXISTS!!!...");
-    }
-    else{
-      let events = await eventList.find({
-        
-      },{
-        eventName:1
-      });
-      for(let i=0;i<events.length;i++){
-        let newUser = await new eventStatus({
-          eventName: events[i].eventName,
-          userName: name,
-          status: false,
-      });
-      newUser.save();
-      }
-      const register = new customerModel({
-      name: name,
-      password: password
-    });
-    
-    register.save().then(async() => {
-      req.session.name = name;
-      req.session.password = password;
-      res.send("success");
-    }).catch(() => {
-      res.send("fail");
-    });
-  }
-
-});
 
 
 //USER HOME PAGE
@@ -290,8 +287,7 @@ app.get("/userHomePage",async(req,res) =>{
   
   let day = new Date();
   let today = day.getDate()+'/'+(day.getMonth()+1)+'/'+day.getFullYear()+'@ '+day.getHours()+
-  ':'+day.getMinutes()+':'+day.getSeconds();    const events = await eventList.find( { //bookingStartTime: { $lte: today } ,
-    // bookingEndTime: { $gte: date } 
+  ':'+day.getMinutes()+':'+day.getSeconds();    const events = await eventList.find( { 
   }, {
     eventName: 1,
     description: 1,
@@ -567,8 +563,7 @@ app.post('/bookedTicket',async(req,res) => {
 app.get('/soldTicketList', async(req,res) => {
 
   let soldTicket = await bookedTickets.find( {userName: req.query.username
-  //bookingStartTime: { $lte: today } ,
-  //bookingEndTime: { $gte: today } 
+  
   }, {
     eventName: 1,
     userName: 1,
@@ -591,7 +586,7 @@ app.get('/soldTicketList', async(req,res) => {
 app.get('/purchaseToHome',async(req,res) =>{
 
   let events = await eventList.find( { 
-    //bookingEndTime: { $gte: today } 
+    
   }, {
     eventName: 1,
     description: 1,
@@ -603,7 +598,6 @@ app.get('/purchaseToHome',async(req,res) =>{
     image:1,
     _id: 1
     });
-   // console.log(soldTicket);
     
     if (events) {
       return res.render('userEventView.hbs', {
@@ -612,7 +606,7 @@ app.get('/purchaseToHome',async(req,res) =>{
         
       });
     }else{
-      //return  res.jsonp([{message:"ticket booked successfuly!!.."}]);
+      
 
     }  
            
@@ -624,7 +618,7 @@ app.get('/purchaseToHome',async(req,res) =>{
 app.get('/viewMoreToHome',async(req,res) =>{
 
   let events = await eventList.find( { 
-    //bookingEndTime: { $gte: today } 
+    
   }, {
     eventName: 1,
     description: 1,
@@ -645,8 +639,7 @@ app.get('/viewMoreToHome',async(req,res) =>{
         
       });
     } else {
-      //return  res.jsonp([{message:"ticket booked successfuly!!.."}]);
-
+     
     }       
          
 });
@@ -761,7 +754,7 @@ app.get('/editingToHome',async(req,res) =>{
 app.get("/eventStatus",async(req,res) => {
  
 
-  //console.log(req.query.eventName+""+req.query.image+""+req.query.description);
+ 
   let soldTicket = await bookedTickets.find({eventName:req.query.eventName,
   description:req.query.description,
   image:req.query.image
@@ -773,7 +766,7 @@ app.get("/eventStatus",async(req,res) => {
   let comments =await commentList.find({
     eventName:req.query.eventName
   });
-  //console.log(soldTicket);;
+ 
   res.render("eventDetails.hbs",{
     soldTicket:soldTicket,
     likes :likes,
@@ -811,7 +804,6 @@ app.get('/logout',(req,res)=>{
 
   
 
-//app.use(express.urlencoded());
 app.use(express.json()); 
 
 
